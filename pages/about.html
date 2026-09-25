@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us | Swift Movers</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .about-intro {
+            padding: 70px 0;
+        }
+
+        .about-intro-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-intro h2 {
+            margin-bottom: 18px;
+        }
+
+        .about-intro p {
+            line-height: 1.8;
+            color: #475569;
+        }
+
+        .about-highlight {
+            background: #071426;
+            color: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+        }
+
+        .about-highlight .eyebrow {
+            color: #f59e0b;
+        }
+
+        .about-highlight h3 {
+            color: white;
+            margin: 10px 0 15px;
+            font-size: 28px;
+        }
+
+        .about-highlight p {
+            color: #cbd5e1;
+        }
+
+        .about-values {
+            padding: 70px 0;
+            background: #f8fafc;
+        }
+
+        .about-section-heading {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 40px;
+        }
+
+        .about-section-heading h2 {
+            margin-bottom: 12px;
+        }
+
+        .about-section-heading p {
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .about-value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .about-value-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.07);
+            border-top: 4px solid #f59e0b;
+        }
+
+        .about-value-card span {
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .about-value-card h3 {
+            margin-bottom: 10px;
+            color: #071426;
+        }
+
+        .about-value-card p {
+            color: #475569;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .about-process {
+            padding: 70px 0;
+        }
+
+        .about-process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .about-process-card {
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+        }
+
+        .about-process-number {
+            font-size: 34px;
+            font-weight: 800;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .about-process-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .about-process-card p {
+            margin: 0;
+            color: #475569;
+            line-height: 1.65;
+        }
+
+        .about-commitment {
+            padding: 70px 0;
+            background: #071426;
+            color: white;
+        }
+
+        .about-commitment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 45px;
+            align-items: center;
+        }
+
+        .about-commitment h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .about-commitment p {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        .about-checks {
+            display: grid;
+            gap: 14px;
+        }
+
+        .about-check {
+            padding: 17px 20px;
+            border: 1px solid rgba(203, 213, 225, 0.2);
+            border-radius: 10px;
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .about-final-cta {
+            padding: 65px 0;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .about-final-cta h2 {
+            margin-bottom: 12px;
+        }
+
+        .about-final-cta p {
+            color: #475569;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .about-intro-grid,
+            .about-commitment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-value-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .about-process-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="site-header">
+
+        <div class="container nav-container">
+
+            <a href="../index.html" class="logo">
+                Swift<span>Movers</span>
+            </a>
+
+            <nav class="navigation" aria-label="Main navigation">
+
+                <a href="../index.html">
+                    Home
+                </a>
+
+                <a href="services.html">
+                    Services
+                </a>
+
+                <a href="products.html">
+                    Products
+                </a>
+
+                <a href="about.html" aria-current="page">
+                    About
+                </a>
+
+                <a href="contact.html">
+                    Contact
+                </a>
+
+            </nav>
+
+            <a href="quotation.html" class="btn">
+                Request a Quote
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main>
+
+        <!-- PAGE HERO -->
+
+        <section class="page-hero">
+
+            <div class="container">
+
+                <p class="eyebrow">
+                    ABOUT SWIFT MOVERS
+                </p>
+
+                <h1>
+                    Moving with purpose. Moving with confidence.
+                </h1>
+
+                <p>
+                    Swift Movers is focused on making moving and logistics
+                    simpler through dependable service, clear communication,
+                    and a practical approach to every request.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- INTRODUCTION -->
+
+        <section class="about-intro">
+
+            <div class="container about-intro-grid">
+
+                <div>
+
+                    <p class="eyebrow">
+                        WHO WE ARE
+                    </p>
+
+                    <h2>
+                        More than transportation. A complete moving experience.
+                    </h2>
+
+                    <p>
+                        Moving can involve much more than transporting items from
+                        one place to another. It requires planning, coordination,
+                        timing, communication, and attention to the details that
+                        matter to the customer.
+                    </p>
+
+                    <p>
+                        Swift Movers is built around that understanding. We provide
+                        moving and logistics solutions that help customers organize
+                        their move from the first request to the final delivery.
+                    </p>
+
+                    <p>
+                        Whether the requirement involves a home, office, furniture,
+                        packing, or logistics support, our approach is to keep the
+                        process straightforward, responsive, and focused on the
+                        customer's requirements.
+                    </p>
+
+                </div>
+
+                <aside class="about-highlight">
+
+                    <p class="eyebrow">
+                        OUR APPROACH
+                    </p>
+
+                    <h3>
+                        Plan. Move. Deliver.
+                    </h3>
+
+                    <p>
+                        Every successful move starts with understanding what needs
+                        to be done. We turn that information into a clear moving
+                        process, practical coordination, and focused delivery.
+                    </p>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- VALUES -->
+
+        <section class="about-values">
+
+            <div class="container">
+
+                <div class="about-section-heading">
+
+                    <p class="eyebrow">
+                        WHAT WE STAND FOR
+                    </p>
+
+                    <h2>
+                        The principles behind Swift Movers
+                    </h2>
+
+                    <p>
+                        Our service is shaped by practical values that help us
+                        communicate clearly, organize efficiently, and keep the
+                        customer's moving requirements at the center of the process.
+                    </p>
+
+                </div>
+
+                <div class="about-value-grid">
+
+                    <article class="about-value-card">
+
+                        <span>01</span>
+
+                        <h3>
+                            Reliability
+                        </h3>
+
+                        <p>
+                            We focus on dependable coordination and clear
+                            communication so customers know what to expect
+                            throughout the moving process.
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-value-card">
+
+                        <span>02</span>
+
+                        <h3>
+                            Professionalism
+                        </h3>
+
+                        <p>
+                            Every request deserves a structured and respectful
+                            approach, from quotation and planning to transportation
+                            and delivery.
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-value-card">
+
+                        <span>03</span>
+
+                        <h3>
+                            Customer Focus
+                        </h3>
+
+                        <p>
+                            No two moves are exactly the same. We listen to the
+                            customer's requirements and shape the service around
+                            the needs of each move.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROCESS -->
+
+        <section class="about-process">
+
+            <div class="container">
+
+                <div class="about-section-heading">
+
+                    <p class="eyebrow">
+                        HOW IT WORKS
+                    </p>
+
+                    <h2>
+                        A straightforward moving process
+                    </h2>
+
+                    <p>
+                        From your first request to the completion of the move,
+                        the goal is to keep every stage clear and organized.
+                    </p>
+
+                </div>
+
+                <div class="about-process-grid">
+
+                    <article class="about-process-card">
+
+                        <div class="about-process-number">
+                            01
+                        </div>
+
+                        <h3>
+                            Tell Us What You Need
+                        </h3>
+
+                        <p>
+                            Share your moving requirements, locations, preferred
+                            date, and the service you need.
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-process-card">
+
+                        <div class="about-process-number">
+                            02
+                        </div>
+
+                        <h3>
+                            Review &amp; Plan
+                        </h3>
+
+                        <p>
+                            Your request gives us the information needed to
+                            understand the move and organize the next steps.
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-process-card">
+
+                        <div class="about-process-number">
+                            03
+                        </div>
+
+                        <h3>
+                            Coordinate the Move
+                        </h3>
+
+                        <p>
+                            We focus on the practical details involved in
+                            preparing the move and transportation.
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-process-card">
+
+                        <div class="about-process-number">
+                            04
+                        </div>
+
+                        <h3>
+                            Deliver
+                        </h3>
+
+                        <p>
+                            The move progresses toward its destination with
+                            communication and coordination kept at the center.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- COMMITMENT -->
+
+        <section class="about-commitment">
+
+            <div class="container about-commitment-grid">
+
+                <div>
+
+                    <p class="eyebrow">
+                        OUR COMMITMENT
+                    </p>
+
+                    <h2>
+                        Built to make moving easier.
+                    </h2>
+
+                    <p>
+                        Our aim is not to make the moving process more complicated.
+                        It is to simplify the work around it by bringing together
+                        planning, communication, transportation, and logistics
+                        support in one clear process.
+                    </p>
+
+                    <p>
+                        We continue to improve the way customers request services,
+                        receive quotations, and communicate their moving needs.
+                    </p>
+
+                </div>
+
+                <div class="about-checks">
+
+                    <div class="about-check">
+                        ✓ Clear quotation and enquiry process
+                    </div>
+
+                    <div class="about-check">
+                        ✓ Flexible moving and logistics services
+                    </div>
+
+                    <div class="about-check">
+                        ✓ Practical communication throughout the move
+                    </div>
+
+                    <div class="about-check">
+                        ✓ Service designed around customer requirements
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FINAL CTA -->
+
+        <section class="about-final-cta">
+
+            <div class="container">
+
+                <p class="eyebrow">
+                    READY TO GET STARTED?
+                </p>
+
+                <h2>
+                    Tell us about your move.
+                </h2>
+
+                <p>
+                    Request a quotation and let Swift Movers help you plan the next step.
+                </p>
+
+                <a href="quotation.html" class="btn">
+                    Request a Quote
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div>
+
+                <a href="../index.html" class="logo">
+                    <span data-site-setting="business_name">Swift Movers</span>
+                </a>
+
+                <p data-site-setting="tagline">
+                    Moving made simple.
+                </p>
+
+            </div>
+
+            <p>
+                © 2026 <span data-site-setting="business_name">Swift Movers</span>. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+    <script src="../js/site-settings.js"></script>
+
+<script src="../js/whatsapp-float.js"></script>
+</body>
+
+</html>

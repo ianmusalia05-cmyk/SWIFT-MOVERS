@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Swift Movers | Admin Login</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            background: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.10);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo .logo {
+            font-size: 30px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: #071426;
+            margin-bottom: 8px;
+        }
+
+        .login-card .login-description {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .login-form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #071426;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        .login-button {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .login-message {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="login-page">
+
+        <div class="login-card">
+
+
+            <div class="login-logo">
+
+                <a href="../index.html" class="logo">
+                    Swift<span>Movers</span>
+                </a>
+
+            </div>
+
+
+            <h1>Admin Login</h1>
+
+            <p class="login-description">
+                Sign in to manage Swift Movers.
+            </p>
+
+
+            <form id="loginForm">
+
+
+                <div class="login-form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="login-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn login-button"
+                >
+                    Login
+                </button>
+
+
+                <p
+                    id="loginMessage"
+                    class="login-message"
+                ></p>
+
+
+            </form>
+
+
+            <a
+                href="../index.html"
+                class="back-link"
+            >
+                ← Back to website
+            </a>
+
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const loginMessage =
+            document.getElementById("loginMessage");
+
+
+        loginForm.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const username =
+                document.getElementById("username").value;
+
+            const password =
+                document.getElementById("password").value;
+
+
+            loginMessage.textContent = "Signing in...";
+
+
+            try {
+
+                const response = await fetch("/api/admin/login", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+
+                });
+
+
+                const result = await response.json();
+
+
+                if (result.success) {
+
+                    loginMessage.textContent =
+                        "Login successful. Redirecting...";
+
+                    window.location.href = "/admin/";
+
+                } else {
+
+                    loginMessage.textContent =
+                        result.message || "Invalid login details.";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                loginMessage.textContent =
+                    "Unable to connect to the server.";
+
+            }
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>

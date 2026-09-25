@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Swift Movers | Moving & Logistics</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* =========================================================
+           SWIFT MOVERS — ENHANCED HOME PAGE
+        ========================================================= */
+
+        .home-hero {
+            position: relative;
+            overflow: hidden;
+            padding: 105px 0 95px;
+            background:
+                linear-gradient(135deg, #071426 0%, #0d223c 58%, #15395d 100%);
+            color: #ffffff;
+        }
+
+        .home-hero::before,
+        .home-hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            pointer-events: none;
+        }
+
+        .home-hero::before {
+            width: 360px;
+            height: 360px;
+            right: -110px;
+            top: -130px;
+            background: rgba(245, 158, 11, 0.14);
+        }
+
+        .home-hero::after {
+            width: 250px;
+            height: 250px;
+            left: -110px;
+            bottom: -110px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .home-hero-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+            gap: 55px;
+            align-items: center;
+        }
+
+        .home-hero-copy {
+            max-width: 760px;
+        }
+
+        .home-eyebrow {
+            display: inline-block;
+            margin: 0 0 16px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #f59e0b;
+        }
+
+        .home-hero h1 {
+            margin: 0 0 20px;
+            color: #ffffff;
+            font-size: clamp(2.6rem, 6vw, 4.8rem);
+            line-height: 1.02;
+            letter-spacing: -0.035em;
+        }
+
+        .home-hero-lead {
+            max-width: 690px;
+            margin: 0;
+            color: #d7e2ee;
+            font-size: 1.12rem;
+            line-height: 1.8;
+        }
+
+        .home-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .home-hero-note {
+            margin: 22px 0 0;
+            color: #aebfd1;
+            font-size: 0.95rem;
+        }
+
+        .home-hero-panel {
+            padding: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+        }
+
+        .home-hero-panel h2 {
+            margin: 0 0 18px;
+            color: #ffffff;
+            font-size: 1.25rem;
+        }
+
+        .home-hero-panel p {
+            margin: 0 0 18px;
+            color: #cdd9e6;
+            line-height: 1.7;
+        }
+
+        .home-hero-checks {
+            display: grid;
+            gap: 12px;
+        }
+
+        .home-check-item {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+            color: #eef4fa;
+            line-height: 1.55;
+        }
+
+        .home-check-icon {
+            display: inline-grid;
+            place-items: center;
+            flex: 0 0 24px;
+            width: 24px;
+            height: 24px;
+            margin-top: 1px;
+            border-radius: 50%;
+            background: #f59e0b;
+            color: #071426;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .home-highlight-strip {
+            padding: 18px 0;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .home-highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .home-highlight {
+            padding: 14px 18px;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .home-highlight:last-child {
+            border-right: 0;
+        }
+
+        .home-highlight strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #071426;
+            font-size: 0.96rem;
+        }
+
+        .home-highlight span {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .home-section {
+            padding: 82px 0;
+        }
+
+        .home-section-alt {
+            background: #f8fafc;
+        }
+
+        .home-section-heading {
+            max-width: 760px;
+            margin: 0 auto 42px;
+            text-align: center;
+        }
+
+        .home-section-heading .home-eyebrow {
+            margin-bottom: 12px;
+        }
+
+        .home-section-heading h2 {
+            margin: 0 0 13px;
+            color: #071426;
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.12;
+        }
+
+        .home-section-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 1.03rem;
+            line-height: 1.75;
+        }
+
+        .home-service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .home-service-card {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.07);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .home-service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 42px rgba(15, 23, 42, 0.11);
+        }
+
+        .home-service-image {
+            width: 100%;
+            height: 205px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .home-service-card-content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding: 25px;
+        }
+
+        .home-service-number {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: #f59e0b;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+        }
+
+        .home-service-card h3 {
+            margin: 0 0 10px;
+            color: #071426;
+            font-size: 1.25rem;
+        }
+
+        .home-service-card p {
+            flex: 1;
+            margin: 0 0 20px;
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .home-service-status {
+            padding: 18px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .home-section-actions {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .home-why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .home-why-card {
+            padding: 28px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+        }
+
+        .home-why-label {
+            display: inline-block;
+            margin-bottom: 13px;
+            padding: 6px 9px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .home-why-card h3 {
+            margin: 0 0 10px;
+            color: #071426;
+            font-size: 1.23rem;
+        }
+
+        .home-why-card p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .home-process-wrap {
+            display: grid;
+            grid-template-columns: 0.7fr 1.3fr;
+            gap: 55px;
+            align-items: start;
+        }
+
+        .home-process-intro {
+            position: sticky;
+            top: 25px;
+        }
+
+        .home-process-intro h2 {
+            margin: 0 0 14px;
+            color: #071426;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            line-height: 1.12;
+        }
+
+        .home-process-intro p {
+            margin: 0 0 22px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        .home-process-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .home-process-card {
+            display: grid;
+            grid-template-columns: 58px 1fr;
+            gap: 17px;
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+        }
+
+        .home-process-number {
+            display: grid;
+            place-items: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 13px;
+            background: #071426;
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 0.98rem;
+        }
+
+        .home-process-card h3 {
+            margin: 2px 0 6px;
+            color: #071426;
+        }
+
+        .home-process-card p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.65;
+        }
+
+        .home-business-section {
+            padding: 0;
+            background: #071426;
+            color: #ffffff;
+        }
+
+        .home-business-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .home-business-copy {
+            padding: 82px 0;
+        }
+
+        .home-business-copy h2 {
+            margin: 0 0 15px;
+            color: #ffffff;
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.12;
+        }
+
+        .home-business-copy p {
+            margin: 0 0 22px;
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        .home-business-list {
+            display: grid;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .home-business-list li {
+            padding: 15px 18px;
+            border: 1px solid rgba(203, 213, 225, 0.18);
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e2e8f0;
+        }
+
+        .home-business-visual {
+            min-height: 430px;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            background:
+                linear-gradient(rgba(245, 158, 11, 0.09), rgba(245, 158, 11, 0.09)),
+                radial-gradient(circle at 30% 25%, rgba(255,255,255,0.10), transparent 35%),
+                linear-gradient(145deg, #102640, #0a1729);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 45px;
+        }
+
+        .home-business-visual-card {
+            width: min(100%, 380px);
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 18px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .home-business-visual-card strong {
+            display: block;
+            margin-bottom: 10px;
+            color: #f59e0b;
+            font-size: 0.82rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .home-business-visual-card h3 {
+            margin: 0 0 10px;
+            color: #ffffff;
+            font-size: 1.45rem;
+        }
+
+        .home-business-visual-card p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        .home-final-cta {
+            padding: 82px 0;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .home-final-cta h2 {
+            margin: 0 0 12px;
+            color: #071426;
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        .home-final-cta p {
+            max-width: 650px;
+            margin: 0 auto 25px;
+            color: #64748b;
+            line-height: 1.75;
+        }
+
+        @media (max-width: 950px) {
+            .home-hero-grid,
+            .home-process-wrap,
+            .home-business-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .home-highlight-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .home-highlight {
+                border-right: 0;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .home-highlight:nth-child(3),
+            .home-highlight:nth-child(4) {
+                border-bottom: 0;
+            }
+
+            .home-service-grid,
+            .home-why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .home-process-intro {
+                position: static;
+            }
+
+            .home-business-copy {
+                padding: 72px 0 30px;
+            }
+
+            .home-business-visual {
+                min-height: 360px;
+                border-left: 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 35px 0 72px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .home-hero {
+                padding: 78px 0 70px;
+            }
+
+            .home-hero-panel {
+                padding: 22px;
+            }
+
+            .home-highlight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .home-highlight {
+                border-bottom: 1px solid #e2e8f0 !important;
+            }
+
+            .home-highlight:last-child {
+                border-bottom: 0 !important;
+            }
+
+            .home-section,
+            .home-final-cta {
+                padding: 65px 0;
+            }
+
+            .home-process-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================================================
+           NAVIGATION & BUTTON HOVER ANIMATIONS
+        ========================================================= */
+
+        .navigation a {
+            position: relative;
+            transition: color 0.25s ease, transform 0.25s ease;
+        }
+
+        .navigation a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -7px;
+            width: 0;
+            height: 2px;
+            border-radius: 10px;
+            background: currentColor;
+            transform: translateX(-50%);
+            transition: width 0.25s ease;
+        }
+
+        .navigation a:hover,
+        .navigation a:focus-visible {
+            transform: translateY(-2px);
+        }
+
+        .navigation a:hover::after,
+        .navigation a:focus-visible::after,
+        .navigation a[aria-current="page"]::after {
+            width: 70%;
+        }
+
+        .navigation a[aria-current="page"] {
+            font-weight: 700;
+        }
+
+        .btn {
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background-color 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .btn:hover,
+        .btn:focus-visible {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.16);
+        }
+
+        .home-hero .btn:hover,
+        .home-hero .btn:focus-visible {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+
+        /* =========================================================
+           CLASSY SWIFT MOVERS NAVIGATION
+        ========================================================= */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+            box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+        }
+
+        .nav-container {
+            min-height: 78px;
+            gap: 26px;
+        }
+
+        .site-header .logo {
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            letter-spacing: -0.02em;
+            transition: transform 0.25s ease;
+        }
+
+        .site-header .logo:hover {
+            transform: translateY(-1px);
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 5px;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 999px;
+            background: rgba(248, 250, 252, 0.88);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .navigation a {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 15px;
+            border-radius: 999px;
+            color: #475569;
+            font-size: 0.92rem;
+            font-weight: 650;
+            text-decoration: none;
+            transition:
+                color 0.25s ease,
+                background-color 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .navigation a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 6px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: #f59e0b;
+            transform: translateX(-50%);
+            transition: width 0.25s ease;
+        }
+
+        .navigation a:hover,
+        .navigation a:focus-visible {
+            color: #071426;
+            background: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            outline: none;
+        }
+
+        .navigation a:hover::after,
+        .navigation a:focus-visible::after {
+            width: 24px;
+        }
+
+        .navigation a[aria-current="page"] {
+            color: #071426;
+            background: #ffffff;
+            box-shadow:
+                0 5px 14px rgba(15, 23, 42, 0.08),
+                inset 0 0 0 1px rgba(15, 23, 42, 0.04);
+        }
+
+        .navigation a[aria-current="page"]::after {
+            width: 24px;
+        }
+
+        .site-header > *,
+        .nav-container > * {
+            min-width: 0;
+        }
+
+        .site-header .nav-container > .btn {
+            position: relative;
+            overflow: hidden;
+            border-radius: 999px;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-shadow: 0 8px 18px rgba(245, 158, 11, 0.20);
+        }
+
+        .site-header .nav-container > .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 70%;
+            height: 100%;
+            transform: skewX(-18deg);
+            background: rgba(255, 255, 255, 0.22);
+            transition: left 0.5s ease;
+            pointer-events: none;
+        }
+
+        .site-header .nav-container > .btn:hover::before,
+        .site-header .nav-container > .btn:focus-visible::before {
+            left: 145%;
+        }
+
+        /* =========================================================
+           EXTRA POLISH THROUGHOUT THE HOME PAGE
+        ========================================================= */
+
+        .home-service-card,
+        .home-why-card,
+        .home-process-card {
+            transition:
+                transform 0.28s ease,
+                box-shadow 0.28s ease,
+                border-color 0.28s ease;
+        }
+
+        .home-service-card:hover,
+        .home-service-card:focus-within {
+            transform: translateY(-6px);
+            border-color: rgba(245, 158, 11, 0.35);
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.13);
+        }
+
+        .home-why-card:hover,
+        .home-why-card:focus-within,
+        .home-process-card:hover,
+        .home-process-card:focus-within {
+            transform: translateY(-4px);
+            border-color: rgba(245, 158, 11, 0.28);
+            box-shadow: 0 18px 38px rgba(15, 23, 42, 0.09);
+        }
+
+        .home-service-card .btn,
+        .home-process-card,
+        .home-why-card {
+            will-change: transform;
+        }
+
+        .home-section-heading h2,
+        .home-process-intro h2,
+        .home-business-copy h2,
+        .home-final-cta h2 {
+            letter-spacing: -0.025em;
+        }
+
+        /* =========================================================
+           MOBILE NAVIGATION
+        ========================================================= */
+
+        @media (max-width: 850px) {
+            .nav-container {
+                flex-wrap: wrap;
+                padding-top: 14px;
+                padding-bottom: 14px;
+                justify-content: center;
+            }
+
+            .site-header .logo {
+                margin-right: auto;
+            }
+
+            .site-header .nav-container > .btn {
+                margin-left: auto;
+            }
+
+            .navigation {
+                order: 3;
+                width: 100%;
+                overflow-x: auto;
+                justify-content: flex-start;
+                scrollbar-width: none;
+            }
+
+            .navigation::-webkit-scrollbar {
+                display: none;
+            }
+
+            .navigation a {
+                flex: 0 0 auto;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .site-header .logo {
+                margin-right: 0;
+            }
+
+            .site-header .nav-container > .btn {
+                margin-left: 0;
+                padding-left: 15px;
+                padding-right: 15px;
+                font-size: 0.88rem;
+            }
+
+            .navigation a {
+                min-height: 40px;
+                padding: 0 13px;
+                font-size: 0.87rem;
+            }
+        }
+
+        /* Respect users who prefer reduced motion. */
+        @media (prefers-reduced-motion: reduce) {
+            .navigation a,
+            .navigation a::after,
+            .site-header .logo,
+            .site-header .nav-container > .btn,
+            .site-header .nav-container > .btn::before,
+            .home-service-card,
+            .home-why-card,
+            .home-process-card {
+                transition: none !important;
+            }
+        }
+
+
+        /* =========================================================
+           HEADER LOGO CONTRAST FIX
+        ========================================================= */
+
+        .site-header .logo {
+            color: #071426 !important;
+            text-decoration: none;
+        }
+
+        .site-header .logo span {
+            color: #f59e0b !important;
+        }
+
+        .site-header .logo:hover {
+            color: #071426 !important;
+        }
+
+        .site-header .logo:hover span {
+            color: #d97706 !important;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         HEADER
+    ========================================================= -->
+    <header class="site-header">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                Swift<span>Movers</span>
+            </a>
+
+            <nav class="navigation" aria-label="Main navigation">
+                <a href="index.html" aria-current="page">Home</a>
+                <a href="pages/services.html">Services</a>
+                <a href="pages/products.html">Products</a>
+                <a href="pages/about.html">About</a>
+                <a href="pages/contact.html">Contact</a>
+            </nav>
+
+            <a href="pages/quotation.html" class="btn">
+                Request a Quote
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
+        <section class="home-hero">
+
+            <div class="container home-hero-grid">
+
+                <div class="home-hero-copy">
+
+                    <p class="home-eyebrow">
+                        MOVING &amp; LOGISTICS SOLUTIONS
+                    </p>
+
+                    <h1>
+                        Move what matters.<br>
+                        Move it with confidence.
+                    </h1>
+
+                    <p class="home-hero-lead">
+                        Swift Movers brings structure, coordination and dependable
+                        service to the moving process — from the first quotation
+                        to the final delivery.
+                    </p>
+
+                    <div class="home-hero-actions">
+
+                        <a href="pages/quotation.html" class="btn">
+                            Request a Quote
+                        </a>
+
+                        <a href="pages/services.html" class="btn">
+                            Explore Services
+                        </a>
+
+                    </div>
+
+                    <p class="home-hero-note">
+                        Straightforward requests. Clear communication. A process built around your move.
+                    </p>
+
+                </div>
+
+
+                <aside class="home-hero-panel" aria-label="Swift Movers service focus">
+
+                    <h2>
+                        Built for the work behind every move
+                    </h2>
+
+                    <p>
+                        Moving is more than transportation. It takes planning,
+                        timing, handling and communication. Our service approach
+                        is built around keeping those pieces connected.
+                    </p>
+
+                    <div class="home-hero-checks">
+
+                        <div class="home-check-item">
+                            <span class="home-check-icon">✓</span>
+                            <span>Clear quotation process</span>
+                        </div>
+
+                        <div class="home-check-item">
+                            <span class="home-check-icon">✓</span>
+                            <span>Moving and logistics services</span>
+                        </div>
+
+                        <div class="home-check-item">
+                            <span class="home-check-icon">✓</span>
+                            <span>Practical coordination from start to finish</span>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             HIGHLIGHT STRIP
+        ====================================================== -->
+        <section class="home-highlight-strip">
+
+            <div class="container home-highlight-grid">
+
+                <div class="home-highlight">
+                    <strong>Moving Services</strong>
+                    <span>Support for different types of moves</span>
+                </div>
+
+                <div class="home-highlight">
+                    <strong>Logistics</strong>
+                    <span>Organized transportation and delivery needs</span>
+                </div>
+
+                <div class="home-highlight">
+                    <strong>Clear Communication</strong>
+                    <span>Know what happens at every stage</span>
+                </div>
+
+                <div class="home-highlight">
+                    <strong>Customer Focus</strong>
+                    <span>A process shaped around your requirements</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SERVICES
+        ====================================================== -->
+        <section class="home-section home-section-alt">
+
+            <div class="container">
+
+                <div class="home-section-heading">
+
+                    <p class="home-eyebrow">
+                        OUR SERVICES
+                    </p>
+
+                    <h2>
+                        One moving partner. Multiple solutions.
+                    </h2>
+
+                    <p>
+                        Choose from the services currently available through Swift Movers.
+                        Every request starts with understanding what needs to be moved,
+                        where it needs to go, and what support is required.
+                    </p>
+
+                </div>
+
+                <div
+                    id="homeServicesStatus"
+                    class="home-service-status"
+                    aria-live="polite"
+                >
+                    Loading services...
+                </div>
+
+                <div
+                    id="homeServiceGrid"
+                    class="home-service-grid"
+                ></div>
+
+                <div class="home-section-actions">
+                    <a href="pages/services.html" class="btn">
+                        View All Services
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             WHY SWIFT MOVERS
+        ====================================================== -->
+        <section class="home-section">
+
+            <div class="container">
+
+                <div class="home-section-heading">
+
+                    <p class="home-eyebrow">
+                        WHY SWIFT MOVERS
+                    </p>
+
+                    <h2>
+                        Serious about the details that make a move work.
+                    </h2>
+
+                    <p>
+                        A smoother move begins with getting the basics right:
+                        understanding the requirement, planning the work,
+                        communicating clearly and following through.
+                    </p>
+
+                </div>
+
+                <div class="home-why-grid">
+
+                    <article class="home-why-card">
+                        <span class="home-why-label">01 / CLARITY</span>
+                        <h3>Start with a clear request</h3>
+                        <p>
+                            Our quotation process gives you a structured way to
+                            tell us what you are moving, your locations, your
+                            preferred date and the service you need.
+                        </p>
+                    </article>
+
+                    <article class="home-why-card">
+                        <span class="home-why-label">02 / COORDINATION</span>
+                        <h3>Keep the moving process organized</h3>
+                        <p>
+                            Good moving work depends on timing and coordination.
+                            We focus on keeping the service process straightforward
+                            and easy to follow.
+                        </p>
+                    </article>
+
+                    <article class="home-why-card">
+                        <span class="home-why-label">03 / DELIVERY</span>
+                        <h3>Keep the goal in sight</h3>
+                        <p>
+                            The objective is simple: move the required items from
+                            the agreed starting point toward the intended destination
+                            with the right support along the way.
+                        </p>
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PROCESS
+        ====================================================== -->
+        <section class="home-section home-section-alt">
+
+            <div class="container home-process-wrap">
+
+                <div class="home-process-intro">
+
+                    <p class="home-eyebrow">
+                        THE SWIFT PROCESS
+                    </p>
+
+                    <h2>
+                        From request to move, keep it simple.
+                    </h2>
+
+                    <p>
+                        We have designed the customer journey around a clear sequence
+                        so that your request can move from information to action without
+                        unnecessary confusion.
+                    </p>
+
+                    <a href="pages/quotation.html" class="btn">
+                        Start Your Request
+                    </a>
+
+                </div>
+
+
+                <div class="home-process-grid">
+
+                    <article class="home-process-card">
+
+                        <div class="home-process-number">
+                            01
+                        </div>
+
+                        <div>
+                            <h3>Tell Us What You Need</h3>
+                            <p>
+                                Submit your moving details, locations, date and
+                                preferred service through the quotation form.
+                            </p>
+                        </div>
+
+                    </article>
+
+
+                    <article class="home-process-card">
+
+                        <div class="home-process-number">
+                            02
+                        </div>
+
+                        <div>
+                            <h3>Review &amp; Plan</h3>
+                            <p>
+                                Your request gives us the information needed to
+                                understand the scope of the move and the support required.
+                            </p>
+                        </div>
+
+                    </article>
+
+
+                    <article class="home-process-card">
+
+                        <div class="home-process-number">
+                            03
+                        </div>
+
+                        <div>
+                            <h3>Coordinate the Move</h3>
+                            <p>
+                                The job is organized around the agreed requirements,
+                                timing and moving or logistics service selected.
+                            </p>
+                        </div>
+
+                    </article>
+
+
+                    <article class="home-process-card">
+
+                        <div class="home-process-number">
+                            04
+                        </div>
+
+                        <div>
+                            <h3>Move &amp; Deliver</h3>
+                            <p>
+                                The focus stays on carrying the move through to its
+                                intended destination and completing the requested service.
+                            </p>
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BUSINESS / LOGISTICS FOCUS
+        ====================================================== -->
+        <section class="home-business-section">
+
+            <div class="container home-business-grid">
+
+                <div class="home-business-copy">
+
+                    <p class="home-eyebrow">
+                        MORE THAN A MOVE
+                    </p>
+
+                    <h2>
+                        Moving, transportation and logistics — connected.
+                    </h2>
+
+                    <p>
+                        Swift Movers is positioned to support more than a single
+                        point-to-point move. Our services are designed to cover
+                        practical moving and logistics requirements where planning,
+                        transport and delivery all have to work together.
+                    </p>
+
+                    <ul class="home-business-list">
+
+                        <li>
+                            Residential and household moving requirements
+                        </li>
+
+                        <li>
+                            Office and workplace relocation needs
+                        </li>
+
+                        <li>
+                            Furniture and item transportation
+                        </li>
+
+                        <li>
+                            Long-distance moving and logistics requests
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="home-business-visual">
+
+                    <div class="home-business-visual-card">
+
+                        <strong>
+                            Swift Movers
+                        </strong>
+
+                        <h3>
+                            Plan the move. Coordinate the work. Deliver the result.
+                        </h3>
+
+                        <p>
+                            A practical service approach built around the actual
+                            requirements of each moving request.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FINAL CTA
+        ====================================================== -->
+        <section class="home-final-cta">
+
+            <div class="container">
+
+                <p class="home-eyebrow">
+                    READY TO MOVE?
+                </p>
+
+                <h2>
+                    Put your move in motion.
+                </h2>
+
+                <p>
+                    Give us the details of what you need moved and request a quotation.
+                    We will use your request as the starting point for the next step.
+                </p>
+
+                <a href="pages/quotation.html" class="btn">
+                    Request a Quote
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div>
+
+                <a href="index.html" class="logo">
+                    <span data-site-setting="business_name">Swift Movers</span>
+                </a>
+
+                <p data-site-setting="tagline">
+                    Moving made simple.
+                </p>
+
+            </div>
+
+            <p>
+                © 2026 <span data-site-setting="business_name">Swift Movers</span>. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================================================
+         LOAD SERVICES FROM DATABASE
+    ========================================================== -->
+    <script src="js/site-settings.js"></script>
+
+    <script>
+        async function loadHomeServices() {
+
+            const status = document.getElementById("homeServicesStatus");
+            const grid = document.getElementById("homeServiceGrid");
+
+            try {
+
+                const response = await fetch("/api/services");
+
+                if (!response.ok) {
+                    throw new Error("Server returned an error.");
+                }
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(
+                        data.message || "Could not load services."
+                    );
+                }
+
+                if (!data.services || data.services.length === 0) {
+
+                    status.textContent =
+                        "No services have been added yet.";
+
+                    return;
+                }
+
+                status.style.display = "none";
+
+                data.services.slice(0, 3).forEach((service, index) => {
+
+                    const card = document.createElement("article");
+
+                    card.className = "home-service-card";
+
+                    const imageHtml = service.image
+                        ? `
+                            <img
+                                class="home-service-image"
+                                src="${service.image}"
+                                alt="${service.name}"
+                                loading="lazy"
+                            >
+                          `
+                        : "";
+
+                    card.innerHTML = `
+                        ${imageHtml}
+
+                        <div class="home-service-card-content">
+
+                            <span class="home-service-number">
+                                SERVICE ${String(index + 1).padStart(2, "0")}
+                            </span>
+
+                            <h3>
+                                ${service.name}
+                            </h3>
+
+                            <p>
+                                ${service.description}
+                            </p>
+
+                            <div>
+                                <a
+                                    href="pages/quotation.html"
+                                    class="btn"
+                                >
+                                    Request a Quote
+                                </a>
+                            </div>
+
+                        </div>
+                    `;
+
+                    grid.appendChild(card);
+
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "Home services error:",
+                    error
+                );
+
+                status.textContent =
+                    "Services could not be loaded. Please make sure the Swift Movers server is running.";
+
+            }
+
+        }
+
+        loadHomeServices();
+    </script>
+
+<script src="js/whatsapp-float.js"></script>
+</body>
+
+</html>

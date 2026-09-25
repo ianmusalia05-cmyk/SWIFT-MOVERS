@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Movers | Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        :root {
+            --admin-navy: #071426;
+            --admin-navy-2: #0d1f36;
+            --admin-gold: #d6a63a;
+            --admin-gold-soft: #fff7df;
+            --admin-bg: #f4f7fb;
+            --admin-card: #ffffff;
+            --admin-border: #e4eaf2;
+            --admin-text: #172033;
+            --admin-muted: #6b778c;
+            --admin-success: #16835b;
+            --admin-danger: #d64646;
+            --admin-shadow: 0 18px 45px rgba(7, 20, 38, 0.08);
+            --admin-radius: 20px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top right, rgba(214,166,58,0.10), transparent 28%),
+                var(--admin-bg);
+            color: var(--admin-text);
+        }
+
+        button, input, textarea, select { font: inherit; }
+
+        .admin-shell { min-height: 100vh; }
+
+        .admin-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(7, 20, 38, 0.94);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .admin-topbar-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .admin-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #d6a63a, #f2cf72);
+            color: #071426;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+        }
+
+        .admin-brand strong { display: block; font-size: 17px; }
+        .admin-brand span { display: block; margin-top: 2px; color: #aeb8c8; font-size: 12px; }
+
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .notification-wrap {
+            position: relative;
+        }
+
+        .notification-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 42px;
+            padding: 0;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .notification-button:hover,
+        .notification-button:focus-visible {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.16);
+            border-color: rgba(255,255,255,0.24);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: #d64646;
+            color: #fff;
+            border: 2px solid var(--admin-navy);
+            font-size: 10px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .notification-panel {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: min(390px, calc(100vw - 32px));
+            padding: 14px;
+            border: 1px solid var(--admin-border);
+            border-radius: 16px;
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 24px 55px rgba(7,20,38,0.18);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px);
+            transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+            z-index: 160;
+        }
+
+        .notification-panel.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .notification-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 4px 4px 11px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .notification-panel-head strong {
+            color: var(--admin-navy);
+            font-size: 14px;
+        }
+
+        .notification-panel-head span {
+            color: var(--admin-muted);
+            font-size: 11px;
+        }
+
+        .notification-list {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .notification-item {
+            display: grid;
+            grid-template-columns: 34px minmax(0, 1fr);
+            gap: 10px;
+            align-items: start;
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #edf1f6;
+            border-radius: 12px;
+            background: #fbfcfe;
+            color: inherit;
+            text-decoration: none;
+            text-align: left;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        .notification-item:hover,
+        .notification-item:focus-visible {
+            transform: translateY(-1px);
+            background: #fff;
+            border-color: #dfe6ef;
+        }
+
+        .notification-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--admin-gold-soft);
+            color: #9a7212;
+            font-size: 15px;
+        }
+
+        .notification-item strong {
+            display: block;
+            color: var(--admin-navy);
+            font-size: 12px;
+        }
+
+        .notification-item small {
+            display: block;
+            margin-top: 3px;
+            color: var(--admin-muted);
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .notification-empty {
+            padding: 18px 10px;
+            text-align: center;
+            color: var(--admin-muted);
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .notification-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px 4px 2px;
+            color: var(--admin-muted);
+            font-size: 11px;
+        }
+
+        .notification-foot a {
+            color: #8f6b12;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .notification-foot a:hover,
+        .notification-foot a:focus-visible {
+            text-decoration: underline;
+        }
+
+        .admin-btn {
+            appearance: none;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .admin-btn:focus-visible,
+        .table-btn:focus-visible,
+        .dashboard-nav a:focus-visible {
+            outline: 3px solid rgba(214,166,58,0.32);
+            outline-offset: 2px;
+        }
+
+        .admin-btn-light {
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .admin-btn-gold {
+            background: linear-gradient(135deg, #d6a63a, #f2cf72);
+            color: #071426;
+            box-shadow: 0 10px 24px rgba(214,166,58,0.22);
+        }
+
+        .admin-btn-danger {
+            background: rgba(214,70,70,0.12);
+            color: #ffb5b5;
+            border-color: rgba(214,70,70,0.25);
+        }
+
+        .admin-main {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 34px 24px 60px;
+        }
+
+        .hero-panel {
+            background:
+                linear-gradient(135deg, rgba(7,20,38,0.98), rgba(13,31,54,0.96)),
+                radial-gradient(circle at right, rgba(214,166,58,0.18), transparent 40%);
+            border-radius: 26px;
+            padding: 34px;
+            color: #fff;
+            box-shadow: var(--admin-shadow);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            right: -70px;
+            top: -100px;
+            border: 1px solid rgba(214,166,58,0.18);
+        }
+
+        .hero-panel p {
+            margin: 0 0 8px;
+            color: #d6a63a;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+        }
+
+        .hero-panel h1 {
+            margin: 0;
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.06;
+        }
+
+        .hero-panel .hero-copy {
+            margin-top: 12px;
+            max-width: 700px;
+            color: #bdc7d7;
+            line-height: 1.7;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .overview-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 22px;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .overview-card .label {
+            font-size: 12px;
+            color: var(--admin-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .overview-card .value {
+            display: block;
+            margin-top: 9px;
+            font-size: 34px;
+            font-weight: 900;
+            color: var(--admin-navy);
+        }
+
+        .overview-card .mini {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--admin-muted);
+        }
+
+        .dashboard-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 26px;
+            box-shadow: var(--admin-shadow);
+            margin-bottom: 22px;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            color: var(--admin-navy);
+            font-size: 24px;
+        }
+
+        .section-head p {
+            margin: 6px 0 0;
+            color: var(--admin-muted);
+            line-height: 1.55;
+        }
+
+        .section-badge {
+            flex: 0 0 auto;
+            padding: 8px 11px;
+            border-radius: 999px;
+            background: var(--admin-gold-soft);
+            color: #9a7212;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .admin-form {
+            display: grid;
+            gap: 16px;
+            padding: 20px;
+            background: #f9fbfe;
+            border: 1px solid var(--admin-border);
+            border-radius: 16px;
+            margin-bottom: 22px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--admin-navy);
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid #d4dce7;
+            background: #fff;
+            color: var(--admin-text);
+            border-radius: 12px;
+            padding: 12px 13px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .field textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: var(--admin-gold);
+            box-shadow: 0 0 0 4px rgba(214,166,58,0.14);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .panel-status {
+            min-height: 22px;
+            margin-bottom: 12px;
+            color: var(--admin-muted);
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--admin-border);
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+            background: #fff;
+        }
+
+        th, td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--admin-border);
+            vertical-align: top;
+        }
+
+        th {
+            background: #f7f9fc;
+            color: var(--admin-navy);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        td {
+            color: #4b5870;
+            font-size: 14px;
+        }
+
+        tbody tr:hover td { background: #fbfcfe; }
+
+        .preview-img {
+            width: 74px;
+            height: 54px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--admin-border);
+            background: #f4f7fb;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .table-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 8px 11px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .table-btn-edit {
+            background: #edf4ff;
+            color: #2462aa;
+        }
+
+        .table-btn-delete {
+            background: #fff0f0;
+            color: var(--admin-danger);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            min-width: 180px;
+        }
+
+        .quick-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 34px;
+            padding: 7px 9px;
+            border-radius: 9px;
+            border: 1px solid var(--admin-border);
+            background: #f8fafc;
+            color: var(--admin-navy);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 900;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(7,20,38,0.10);
+        }
+
+        .quick-action:focus-visible {
+            outline: 3px solid rgba(214,166,58,0.28);
+            outline-offset: 2px;
+        }
+
+        .quick-action-call {
+            background: #eefbf4;
+            border-color: #c8ead7;
+            color: #16835b;
+        }
+
+        .quick-action-whatsapp {
+            background: #effaf3;
+            border-color: #c8ead7;
+            color: #138a57;
+        }
+
+        .quick-action-email {
+            background: #eef4ff;
+            border-color: #cfe0ff;
+            color: #245ea8;
+        }
+
+        .quick-action-disabled {
+            opacity: 0.45;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        .quotation-action-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-width: 250px;
+        }
+
+        .view-quotation-button {
+            border: 1px solid #d9c17b;
+            background: linear-gradient(135deg, #fffaf0, #fff4d3);
+            color: #7b5a0b;
+            border-radius: 9px;
+            padding: 8px 11px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 900;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .view-quotation-button:hover,
+        .view-quotation-button:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(7,20,38,0.10);
+            background: #fff7df;
+        }
+
+        .view-quotation-button:focus-visible,
+        .quotation-modal-close:focus-visible {
+            outline: 3px solid rgba(214,166,58,0.30);
+            outline-offset: 2px;
+        }
+
+        .quotation-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            background: rgba(7, 20, 38, 0.62);
+            backdrop-filter: blur(7px);
+        }
+
+        .quotation-modal.open {
+            display: flex;
+        }
+
+        .quotation-modal-dialog {
+            position: relative;
+            width: min(900px, 100%);
+            max-height: min(88vh, 820px);
+            overflow: auto;
+            background: #fff;
+            border: 1px solid var(--admin-border);
+            border-radius: 22px;
+            box-shadow: 0 28px 80px rgba(7,20,38,0.25);
+        }
+
+        .quotation-modal-head {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--admin-border);
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(10px);
+        }
+
+        .quotation-modal-head p {
+            margin: 0 0 5px;
+            color: #9a7212;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .quotation-modal-head h2 {
+            margin: 0;
+            color: var(--admin-navy);
+            font-size: 26px;
+        }
+
+        .quotation-modal-subtitle {
+            margin-top: 6px;
+            color: var(--admin-muted);
+            font-size: 13px;
+        }
+
+        .quotation-modal-close {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--admin-border);
+            border-radius: 10px;
+            background: #f7f9fc;
+            color: var(--admin-navy);
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .quotation-modal-body {
+            padding: 24px;
+        }
+
+        .quotation-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .quotation-detail-card {
+            padding: 16px;
+            border: 1px solid var(--admin-border);
+            border-radius: 14px;
+            background: #fbfcfe;
+        }
+
+        .quotation-detail-card.full {
+            grid-column: 1 / -1;
+        }
+
+        .quotation-detail-label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--admin-muted);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .quotation-detail-value {
+            color: var(--admin-text);
+            font-size: 14px;
+            line-height: 1.65;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .quotation-detail-value a {
+            color: #245ea8;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .quotation-detail-value a:hover,
+        .quotation-detail-value a:focus-visible {
+            text-decoration: underline;
+        }
+
+        .quotation-modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid var(--admin-border);
+        }
+
+        .quotation-modal-footer .form-actions {
+            margin: 0;
+        }
+
+        @media (max-width: 720px) {
+            .quotation-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quotation-detail-card.full {
+                grid-column: auto;
+            }
+
+            .quotation-modal {
+                padding: 12px;
+            }
+
+            .quotation-modal-dialog {
+                max-height: 94vh;
+                border-radius: 18px;
+            }
+
+            .quotation-modal-head,
+            .quotation-modal-body {
+                padding: 18px;
+            }
+
+            .quotation-action-group {
+                min-width: 0;
+            }
+
+            .quotation-modal-footer {
+                align-items: stretch;
+            }
+        }
+
+        .status-select {
+            min-width: 120px;
+            border: 1px solid #d4dce7;
+            border-radius: 10px;
+            padding: 8px 10px;
+            background: #fff;
+            font-weight: 700;
+            color: var(--admin-text);
+        }
+
+        .empty-state {
+            padding: 30px;
+            text-align: center;
+            color: var(--admin-muted);
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #8290a5;
+            font-size: 12px;
+            padding-top: 8px;
+        }
+
+        @media (max-width: 980px) {
+            .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 720px) {
+            .admin-topbar-inner,
+            .section-head { flex-direction: column; align-items: stretch; }
+            .admin-actions { width: 100%; }
+            .admin-actions .admin-btn { flex: 1; text-align: center; }
+            .hero-panel { padding: 26px; }
+            .admin-main { padding-left: 16px; padding-right: 16px; }
+            .overview-grid { grid-template-columns: 1fr 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .dashboard-card { padding: 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .overview-grid { grid-template-columns: 1fr; }
+        }
+
+        .settings-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .settings-help {
+            margin: 0 0 2px;
+            color: var(--admin-muted);
+            line-height: 1.65;
+            font-size: 13px;
+        }
+
+        .settings-status {
+            min-height: 24px;
+            margin-top: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--admin-muted);
+        }
+
+        .settings-status.success {
+            color: var(--admin-success);
+        }
+
+        .settings-status.error {
+            color: var(--admin-danger);
+        }
+
+        .settings-section-divider {
+            margin: 8px 0 0;
+            padding-top: 18px;
+            border-top: 1px solid var(--admin-border);
+            color: var(--admin-navy);
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .hero-panel-top {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .hero-live-card {
+            min-width: 230px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 13px 15px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-live-card strong {
+            display: block;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .hero-live-card small {
+            display: block;
+            margin-top: 2px;
+            color: #aeb8c8;
+            font-size: 11px;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            flex: 0 0 10px;
+            border-radius: 50%;
+            background: #42d392;
+            box-shadow: 0 0 0 5px rgba(66,211,146,0.12);
+        }
+
+        .dashboard-nav {
+            position: sticky;
+            top: 81px;
+            z-index: 80;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin: 0 0 24px;
+            padding: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--admin-border);
+            border-radius: 16px;
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 12px 30px rgba(7,20,38,0.07);
+            backdrop-filter: blur(12px);
+            scrollbar-width: thin;
+        }
+
+        .dashboard-nav a {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 13px;
+            border-radius: 11px;
+            color: var(--admin-navy);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 800;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a:focus-visible {
+            background: #fff7df;
+            color: #8f6b12;
+            transform: translateY(-1px);
+        }
+
+        .dashboard-nav span {
+            min-width: 21px;
+            padding: 2px 6px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: #65728a;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .section-toolbar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .section-toolbar .panel-status {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .toolbar-search {
+            width: min(360px, 100%);
+        }
+
+        .toolbar-search input {
+            width: 100%;
+            border: 1px solid #d4dce7;
+            border-radius: 11px;
+            padding: 10px 12px;
+            background: #fff;
+            color: var(--admin-text);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .toolbar-search input:focus {
+            border-color: var(--admin-gold);
+            box-shadow: 0 0 0 4px rgba(214,166,58,0.14);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            width: min(560px, 100%);
+            justify-content: flex-end;
+        }
+
+        .toolbar-actions .toolbar-search {
+            flex: 1 1 300px;
+        }
+
+        .admin-btn-export {
+            flex: 0 0 auto;
+            background: #f7f9fc;
+            color: var(--admin-navy);
+            border-color: var(--admin-border);
+            box-shadow: 0 7px 18px rgba(7,20,38,0.06);
+        }
+
+        .admin-btn-export:hover,
+        .admin-btn-export:focus-visible {
+            background: #fff7df;
+            color: #8f6b12;
+            border-color: #edd894;
+        }
+
+        .admin-btn-export:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .status-select.status-new,
+        .status-select.status-unread {
+            border-color: #edd894;
+            background: #fff9e9;
+        }
+
+        .status-select.status-contacted,
+        .status-select.status-read {
+            border-color: #b9d8f7;
+            background: #f1f7ff;
+        }
+
+        .status-select.status-quoted,
+        .status-select.status-replied {
+            border-color: #bfe4d2;
+            background: #effbf5;
+        }
+
+        .status-select.status-completed {
+            border-color: #a9dfc8;
+            background: #eafaf3;
+        }
+
+        .status-select.status-cancelled {
+            border-color: #efc0c0;
+            background: #fff2f2;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 720px) {
+            .hero-panel-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hero-live-card {
+                min-width: 0;
+            }
+
+            .dashboard-nav {
+                top: 122px;
+            }
+
+            .section-toolbar {
+                flex-direction: column;
+            }
+
+            .toolbar-search {
+                width: 100%;
+            }
+
+            .toolbar-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .toolbar-actions .toolbar-search {
+                width: 100%;
+            }
+
+            .toolbar-actions .admin-btn-export {
+                width: 100%;
+            }
+
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-shell">
+
+    <header class="admin-topbar">
+        <div class="admin-topbar-inner">
+            <a class="admin-brand" href="../index.html" aria-label="Swift Movers home">
+                <div class="admin-mark">SM</div>
+                <div>
+                    <strong>Swift Movers Admin</strong>
+                    <span>Website Management</span>
+                </div>
+            </a>
+
+            <div class="admin-actions">
+                <div class="notification-wrap" id="notificationWrap">
+                    <button id="notificationButton" class="notification-button" type="button" aria-label="Open notifications" aria-expanded="false" aria-controls="notificationPanel">
+                        <span aria-hidden="true">🔔</span>
+                        <span id="notificationBadge" class="notification-badge" hidden>0</span>
+                    </button>
+                    <div id="notificationPanel" class="notification-panel" aria-label="Admin notifications">
+                        <div class="notification-panel-head">
+                            <strong>Notifications &amp; Alerts</strong>
+                            <span id="notificationUpdatedLabel">Live</span>
+                        </div>
+                        <div id="notificationList" class="notification-list"></div>
+                        <div class="notification-foot">
+                            <span>Customer activity and site traffic</span>
+                            <a href="visitors.html">View analytics</a>
+                        </div>
+                    </div>
+                </div>
+                <a class="admin-btn admin-btn-light" href="visitors.html">Visitor Analytics</a>
+                <a class="admin-btn admin-btn-light" href="#settingsSection">Site Settings</a>
+                <a class="admin-btn admin-btn-light" href="../index.html">View Website</a>
+                <button id="logoutButton" class="admin-btn admin-btn-danger" type="button">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+
+        <section class="hero-panel">
+            <div class="hero-panel-top">
+                <div>
+                    <p>CONTROL CENTER</p>
+                    <h1>Manage Swift Movers with confidence.</h1>
+                    <div class="hero-copy">
+                        Update what customers see, review incoming quotation requests,
+                        monitor customer messages, and keep the public website current from one place.
+                    </div>
+                </div>
+                <div class="hero-live-card" aria-label="Dashboard system status">
+                    <span class="live-dot" aria-hidden="true"></span>
+                    <div>
+                        <strong id="serverStatusLabel">Checking server...</strong>
+                        <small id="lastRefreshLabel">Preparing dashboard</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <nav class="dashboard-nav" aria-label="Dashboard sections">
+            <a href="#productsSection">Products</a>
+            <a href="#servicesSection">Services</a>
+            <a href="#quotationsSection">Quotations <span id="navQuoteBadge">0</span></a>
+            <a href="#messagesSection">Messages <span id="navMessageBadge">0</span></a>
+            <a href="visitors.html">Visitors</a>
+            <a href="#settingsSection">Site Settings</a>
+        </nav>
+
+        <section class="overview-grid" aria-label="Dashboard overview">
+            <div class="overview-card">
+                <span class="label">Products</span>
+                <strong class="value" id="productsCount">—</strong>
+                <div class="mini" id="productsMini">Published product records</div>
+            </div>
+            <div class="overview-card">
+                <span class="label">Services</span>
+                <strong class="value" id="servicesCount">—</strong>
+                <div class="mini" id="servicesMini">Available moving services</div>
+            </div>
+            <div class="overview-card">
+                <span class="label">Quotations</span>
+                <strong class="value" id="quotationsCount">—</strong>
+                <div class="mini" id="quotationsMini">Incoming quote requests</div>
+            </div>
+            <div class="overview-card">
+                <span class="label">Messages</span>
+                <strong class="value" id="messagesCount">—</strong>
+                <div class="mini" id="messagesMini">Customer enquiries</div>
+            </div>
+        </section>
+
+        <section class="dashboard-card" id="productsSection">
+            <div class="section-head">
+                <div>
+                    <h2>Product Management</h2>
+                    <p>Add, edit, or remove products shown on the public Products page.</p>
+                </div>
+                <span class="section-badge">LIVE CONTENT</span>
+            </div>
+
+            <form id="productForm" class="admin-form">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="productName">Product Name</label>
+                        <input id="productName" name="name" type="text" placeholder="Example: Moving Boxes" required>
+                    </div>
+                    <div class="field">
+                        <label for="productImage">Product Image</label>
+                        <input id="productImage" name="imageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <small style="display:block;margin-top:7px;color:#6b778c;">JPG, PNG, WEBP or GIF • Maximum 5MB</small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" name="description" placeholder="Describe the product..." required></textarea>
+                </div>
+
+                <div style="font-size:12px;color:#6b778c;">Choose an image from your computer. When editing, leave this field empty to keep the current image.</div>
+
+                <div class="form-actions">
+                    <button id="productSubmitButton" class="admin-btn admin-btn-gold" type="submit">Add Product</button>
+                    <button id="cancelProductEditButton" class="admin-btn admin-btn-light" type="button" style="display:none;background:#eef2f7;color:#3c485c;border-color:#dce3ec;">Cancel Edit</button>
+                </div>
+            </form>
+
+            <div id="productStatus" class="panel-status">Loading products...</div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="productTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="dashboard-card" id="servicesSection">
+            <div class="section-head">
+                <div>
+                    <h2>Service Management</h2>
+                    <p>Keep your service list, descriptions, and images up to date.</p>
+                </div>
+                <span class="section-badge">LIVE CONTENT</span>
+            </div>
+
+            <form id="serviceForm" class="admin-form">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="serviceName">Service Name</label>
+                        <input id="serviceName" name="name" type="text" placeholder="Example: House Moving" required>
+                    </div>
+                    <div class="field">
+                        <label for="serviceImage">Service Image</label>
+                        <input id="serviceImage" name="imageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <small style="display:block;margin-top:7px;color:#6b778c;">JPG, PNG, WEBP or GIF • Maximum 5MB</small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="serviceDescription">Description</label>
+                    <textarea id="serviceDescription" name="description" placeholder="Describe the service..." required></textarea>
+                </div>
+
+                <div style="font-size:12px;color:#6b778c;">Choose an image from your computer. When editing, leave this field empty to keep the current image.</div>
+
+                <div class="form-actions">
+                    <button id="serviceSubmitButton" class="admin-btn admin-btn-gold" type="submit">Add Service</button>
+                    <button id="cancelServiceEditButton" class="admin-btn admin-btn-light" type="button" style="display:none;background:#eef2f7;color:#3c485c;border-color:#dce3ec;">Cancel Edit</button>
+                </div>
+            </form>
+
+            <div id="serviceStatus" class="panel-status">Loading services...</div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Service</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="serviceTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="dashboard-card" id="quotationsSection">
+            <div class="section-head">
+                <div>
+                    <h2>Quotation Requests</h2>
+                    <p>Review new quote requests and update their progress as you follow up.</p>
+                </div>
+                <span class="section-badge">CUSTOMER LEADS</span>
+            </div>
+
+            <div class="section-toolbar">
+                <div id="quotationStatus" class="panel-status">Loading quotations...</div>
+                <div class="toolbar-actions">
+                    <label class="toolbar-search">
+                        <span class="sr-only">Search quotations</span>
+                        <input id="quotationSearch" type="search" placeholder="Search customer, phone, location..." autocomplete="off">
+                    </label>
+                    <button id="exportQuotationsButton" class="admin-btn admin-btn-export" type="button" title="Download all quotation requests as a CSV file">⬇ Export CSV</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Date</th>
+                        <th>Property</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="quotationTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="dashboard-card" id="messagesSection">
+            <div class="section-head">
+                <div>
+                    <h2>Customer Messages</h2>
+                    <p>See enquiries submitted through the public Contact page.</p>
+                </div>
+                <span class="section-badge">INBOX</span>
+            </div>
+
+            <div class="section-toolbar">
+                <div id="messageStatus" class="panel-status">Loading messages...</div>
+                <div class="toolbar-actions">
+                    <label class="toolbar-search">
+                        <span class="sr-only">Search customer messages</span>
+                        <input id="messageSearch" type="search" placeholder="Search name, email, subject..." autocomplete="off">
+                    </label>
+                    <button id="exportMessagesButton" class="admin-btn admin-btn-export" type="button" title="Download all customer messages as a CSV file">⬇ Export CSV</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Quick Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="messageTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="dashboard-card" id="settingsSection">
+            <div class="section-head">
+                <div>
+                    <h2>Site Settings</h2>
+                    <p>Manage the business information that will be used across the public Swift Movers website.</p>
+                </div>
+                <span class="section-badge">WEBSITE INFO</span>
+            </div>
+
+            <p class="settings-help">
+                Keep your official business details here. Saved values are used across the public website, including contact details, footer information, phone links, WhatsApp and social links.
+            </p>
+
+            <form id="settingsForm" class="settings-form">
+
+                <div class="settings-section-divider">Business Identity</div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="settingBusinessName">Business Name</label>
+                        <input id="settingBusinessName" name="business_name" type="text" placeholder="Swift Movers" required>
+                    </div>
+                    <div class="field">
+                        <label for="settingTagline">Tagline</label>
+                        <input id="settingTagline" name="tagline" type="text" placeholder="Moving made simple.">
+                    </div>
+                </div>
+
+                <div class="settings-section-divider">Contact Information</div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="settingPhone">Phone</label>
+                        <input id="settingPhone" name="phone" type="tel" placeholder="+254 ...">
+                    </div>
+                    <div class="field">
+                        <label for="settingEmail">Email</label>
+                        <input id="settingEmail" name="email" type="email" placeholder="info@swiftmovers.com">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="settingAddress">Business Address</label>
+                    <textarea id="settingAddress" name="address" placeholder="Enter the business location or address..."></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="settingHours">Operating Hours</label>
+                    <textarea id="settingHours" name="operating_hours" placeholder="Monday - Saturday: 8:00 AM - 6:00 PM"></textarea>
+                </div>
+
+                <div class="settings-section-divider">WhatsApp &amp; Social Links</div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="settingWhatsapp">WhatsApp</label>
+                        <input id="settingWhatsapp" name="whatsapp" type="text" placeholder="+254 ... or https://wa.me/...">
+                    </div>
+                    <div class="field">
+                        <label for="settingFacebook">Facebook</label>
+                        <input id="settingFacebook" name="facebook" type="url" placeholder="https://facebook.com/...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="settingInstagram">Instagram</label>
+                        <input id="settingInstagram" name="instagram" type="url" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="field">
+                        <label for="settingTiktok">TikTok</label>
+                        <input id="settingTiktok" name="tiktok" type="url" placeholder="https://tiktok.com/@...">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="settingsSaveButton" class="admin-btn admin-btn-gold" type="submit">Save Settings</button>
+                </div>
+
+                <div id="settingsStatus" class="settings-status" aria-live="polite">Loading site settings...</div>
+            </form>
+        </section>
+
+        <div class="footer-note">Swift Movers Admin • Keep the public website fresh, clear, and useful.</div>
+    </main>
+</div>
+
+<div
+    id="quotationModal"
+    class="quotation-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="quotationModalTitle"
+    aria-describedby="quotationModalSubtitle"
+    aria-hidden="true"
+>
+    <div class="quotation-modal-dialog" role="document">
+        <div class="quotation-modal-head">
+            <div>
+                <p>Quotation Details</p>
+                <h2 id="quotationModalTitle">Quotation #—</h2>
+                <div id="quotationModalSubtitle" class="quotation-modal-subtitle">Full customer request</div>
+            </div>
+            <button
+                id="quotationModalCloseButton"
+                class="quotation-modal-close"
+                type="button"
+                aria-label="Close quotation details"
+                title="Close"
+            >×</button>
+        </div>
+
+        <div class="quotation-modal-body">
+            <div id="quotationModalContent"></div>
+
+            <div class="quotation-modal-footer">
+                <div id="quotationModalActions"></div>
+                <div class="form-actions">
+                    <button id="quotationModalCloseFooterButton" class="admin-btn admin-btn-light" type="button" style="background:#eef2f7;color:#3c485c;border-color:#dce3ec;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let editingProductId = null;
+    let editingServiceId = null;
+    let quotationsCache = [];
+    let messagesCache = [];
+    let visitorNotificationStats = null;
+
+    async function api(url, options = {}) {
+        const response = await fetch(url, {
+            credentials: "same-origin",
+            ...options
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "/admin/login.html";
+            throw new Error("Unauthorized");
+        }
+
+        let data = {};
+        try {
+            data = await response.json();
+        } catch {
+            data = { success: false, message: "Invalid server response." };
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Request failed.");
+        }
+
+        return data;
+    }
+
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function setCount(id, value) {
+        document.getElementById(id).textContent = value;
+    }
+
+    function renderEmpty(tbodyId, colspan, text) {
+        document.getElementById(tbodyId).innerHTML =
+            `<tr><td colspan="${colspan}" class="empty-state">${escapeHTML(text)}</td></tr>`;
+    }
+
+    function applyStatusClass(select) {
+        [...select.classList].forEach(className => {
+            if (className.startsWith("status-")) {
+                select.classList.remove(className);
+            }
+        });
+
+        if (select.value) {
+            select.classList.add(`status-${select.value}`);
+        }
+    }
+
+    function updateOverviewMeta() {
+        const newQuotations = quotationsCache.filter(item => item.status === "new").length;
+        const unreadMessages = messagesCache.filter(item => item.status === "unread").length;
+
+        document.getElementById("quotationsMini").textContent =
+            `${newQuotations} new request${newQuotations === 1 ? "" : "s"} awaiting follow-up`;
+        document.getElementById("messagesMini").textContent =
+            `${unreadMessages} unread message${unreadMessages === 1 ? "" : "s"}`;
+
+        document.getElementById("navQuoteBadge").textContent = newQuotations;
+        document.getElementById("navMessageBadge").textContent = unreadMessages;
+    }
+
+    function updateDashboardTimestamp() {
+        const now = new Date();
+        const formatted = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        document.getElementById("lastRefreshLabel").textContent = `Last refreshed ${formatted}`;
+    }
+
+    async function checkServerStatus() {
+        const label = document.getElementById("serverStatusLabel");
+        try {
+            const data = await api("/api/status");
+            label.textContent = data.success ? "Server online" : "Server responded";
+        } catch {
+            label.textContent = "Server connection issue";
+        }
+    }
+
+    function updateNotifications() {
+        const badge = document.getElementById("notificationBadge");
+        const list = document.getElementById("notificationList");
+        const updatedLabel = document.getElementById("notificationUpdatedLabel");
+
+        const newQuotations = quotationsCache.filter(item => item.status === "new").length;
+        const unreadMessages = messagesCache.filter(item => item.status === "unread").length;
+        const visitsToday = Number(visitorNotificationStats?.visits_today ?? 0);
+        const attentionCount = newQuotations + unreadMessages;
+
+        badge.textContent = attentionCount > 99 ? "99+" : String(attentionCount);
+        badge.hidden = attentionCount === 0;
+
+        const items = [];
+
+        if (newQuotations > 0) {
+            items.push(`
+                <a class="notification-item" href="#quotationsSection" data-close-notifications>
+                    <span class="notification-icon" aria-hidden="true">📋</span>
+                    <span>
+                        <strong>${newQuotations} new quotation request${newQuotations === 1 ? "" : "s"}</strong>
+                        <small>New customer quote requests are waiting for follow-up.</small>
+                    </span>
+                </a>
+            `);
+        }
+
+        if (unreadMessages > 0) {
+            items.push(`
+                <a class="notification-item" href="#messagesSection" data-close-notifications>
+                    <span class="notification-icon" aria-hidden="true">✉️</span>
+                    <span>
+                        <strong>${unreadMessages} unread customer message${unreadMessages === 1 ? "" : "s"}</strong>
+                        <small>Open the inbox to review customer enquiries.</small>
+                    </span>
+                </a>
+            `);
+        }
+
+        if (visitsToday > 0) {
+            items.push(`
+                <a class="notification-item" href="visitors.html">
+                    <span class="notification-icon" aria-hidden="true">👁️</span>
+                    <span>
+                        <strong>${visitsToday} site visit${visitsToday === 1 ? "" : "s"} today</strong>
+                        <small>Visitor activity has been recorded in the analytics dashboard.</small>
+                    </span>
+                </a>
+            `);
+        }
+
+        if (!items.length) {
+            list.innerHTML = `
+                <div class="notification-empty">
+                    <strong style="display:block;color:var(--admin-navy);margin-bottom:4px;">You're all caught up.</strong>
+                    No new quotations or unread messages need attention right now.
+                </div>
+            `;
+        } else {
+            list.innerHTML = items.join("");
+        }
+
+        updatedLabel.textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    }
+
+    async function loadVisitorNotificationSummary() {
+        try {
+            const data = await api("/api/visitors?limit=1&trend_days=7");
+            visitorNotificationStats = data.stats || null;
+        } catch {
+            visitorNotificationStats = null;
+        }
+
+        updateNotifications();
+    }
+
+    function closeNotifications() {
+        const panel = document.getElementById("notificationPanel");
+        const button = document.getElementById("notificationButton");
+        panel.classList.remove("open");
+        button.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleNotifications() {
+        const panel = document.getElementById("notificationPanel");
+        const button = document.getElementById("notificationButton");
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+    }
+
+    function refreshFilteredQuotations() {
+        const search = String(document.getElementById("quotationSearch").value || "").trim().toLowerCase();
+        const body = document.getElementById("quotationTableBody");
+
+        if (!search) {
+            renderQuotations(quotationsCache);
+            return;
+        }
+
+        const filtered = quotationsCache.filter(item =>
+            [item.name, item.phone, item.email, item.moving_from, item.moving_to, item.property_type, item.service]
+                .some(value => String(value || "").toLowerCase().includes(search))
+        );
+
+        if (!filtered.length) {
+            renderEmpty("quotationTableBody", 10, "No quotation requests match your search.");
+            return;
+        }
+
+        renderQuotations(filtered);
+    }
+
+    function refreshFilteredMessages() {
+        const search = String(document.getElementById("messageSearch").value || "").trim().toLowerCase();
+
+        if (!search) {
+            renderMessages(messagesCache);
+            return;
+        }
+
+        const filtered = messagesCache.filter(item =>
+            [item.name, item.email, item.phone, item.subject, item.message]
+                .some(value => String(value || "").toLowerCase().includes(search))
+        );
+
+        if (!filtered.length) {
+            renderEmpty("messageTableBody", 9, "No customer messages match your search.");
+            return;
+        }
+
+        renderMessages(filtered);
+    }
+
+
+    function csvEscape(value) {
+        return `"${String(value ?? "").replaceAll('"', '""')}"`;
+    }
+
+    function downloadCSV(filename, headers, rows) {
+        const csvLines = [
+            headers.map(csvEscape).join(","),
+            ...rows.map(row => row.map(csvEscape).join(","))
+        ];
+
+        const blob = new Blob(["\uFEFF" + csvLines.join("\r\n")], {
+            type: "text/csv;charset=utf-8;"
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function exportDateStamp() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+
+    function exportQuotationsCSV() {
+        if (!quotationsCache.length) {
+            alert("There are no quotation requests to export.");
+            return;
+        }
+
+        const headers = [
+            "ID",
+            "Customer Name",
+            "Email",
+            "Phone",
+            "Moving From",
+            "Moving To",
+            "Move Date",
+            "Property Type",
+            "Service",
+            "Items",
+            "Message",
+            "Status",
+            "Created At"
+        ];
+
+        const rows = quotationsCache.map(item => [
+            item.id,
+            item.name,
+            item.email,
+            item.phone,
+            item.moving_from,
+            item.moving_to,
+            item.move_date,
+            item.property_type,
+            item.service,
+            item.items,
+            item.message,
+            item.status,
+            item.created_at
+        ]);
+
+        downloadCSV(
+            `swift-movers-quotations-${exportDateStamp()}.csv`,
+            headers,
+            rows
+        );
+    }
+
+    function exportMessagesCSV() {
+        if (!messagesCache.length) {
+            alert("There are no customer messages to export.");
+            return;
+        }
+
+        const headers = [
+            "ID",
+            "Name",
+            "Email",
+            "Phone",
+            "Subject",
+            "Message",
+            "Status",
+            "Created At"
+        ];
+
+        const rows = messagesCache.map(item => [
+            item.id,
+            item.name,
+            item.email,
+            item.phone,
+            item.subject,
+            item.message,
+            item.status,
+            item.created_at
+        ]);
+
+        downloadCSV(
+            `swift-movers-messages-${exportDateStamp()}.csv`,
+            headers,
+            rows
+        );
+    }
+
+    async function loadProducts() {
+        const status = document.getElementById("productStatus");
+        const body = document.getElementById("productTableBody");
+
+        try {
+            const data = await api("/api/products");
+            body.innerHTML = "";
+            const products = data.products || [];
+            setCount("productsCount", products.length);
+
+            if (!products.length) {
+                status.textContent = "No products added yet.";
+                renderEmpty("productTableBody", 5, "No products available.");
+                return;
+            }
+
+            status.textContent = `${products.length} product(s) found.`;
+
+            products.forEach(product => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${escapeHTML(product.id)}</td>
+                    <td>${product.image
+                        ? `<img class="preview-img" src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}">`
+                        : "No image"}</td>
+                    <td><strong>${escapeHTML(product.name)}</strong></td>
+                    <td>${escapeHTML(product.description)}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="table-btn table-btn-edit" type="button" onclick="startEditProduct(${Number(product.id)})">Edit</button>
+                            <button class="table-btn table-btn-delete" type="button" onclick="deleteProduct(${Number(product.id)})">Delete</button>
+                        </div>
+                    </td>
+                `;
+                body.appendChild(row);
+            });
+        } catch (error) {
+            status.textContent = error.message || "Could not load products.";
+        }
+    }
+
+    document.getElementById("productForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        const button = document.getElementById("productSubmitButton");
+
+        button.disabled = true;
+        button.textContent = editingProductId === null ? "Saving..." : "Updating...";
+
+        try {
+            const url = editingProductId === null
+                ? "/api/products"
+                : `/api/products/${editingProductId}`;
+
+            const method = editingProductId === null ? "POST" : "PUT";
+
+            const result = await api(url, {
+                method,
+                body: formData
+            });
+
+            alert(result.message || "Product saved successfully.");
+            resetProductForm();
+            await loadProducts();
+        } catch (error) {
+            alert(error.message || "Could not save product.");
+        } finally {
+            button.disabled = false;
+            button.textContent = editingProductId === null ? "Add Product" : "Update Product";
+        }
+    });
+
+    async function startEditProduct(id) {
+        try {
+            const data = await api("/api/products");
+            const product = (data.products || []).find(item => Number(item.id) === Number(id));
+
+            if (!product) {
+                alert("Product not found.");
+                return;
+            }
+
+            editingProductId = Number(product.id);
+            document.getElementById("productName").value = product.name || "";
+            document.getElementById("productDescription").value = product.description || "";
+            document.getElementById("productImage").value = "";
+            document.getElementById("productSubmitButton").textContent = "Update Product";
+            document.getElementById("cancelProductEditButton").style.display = "inline-block";
+
+            document.getElementById("productsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+            document.getElementById("productName").focus();
+        } catch (error) {
+            alert(error.message || "Could not load product.");
+        }
+    }
+
+    function resetProductForm() {
+        editingProductId = null;
+        document.getElementById("productForm").reset();
+        document.getElementById("productSubmitButton").textContent = "Add Product";
+        document.getElementById("cancelProductEditButton").style.display = "none";
+    }
+
+    document.getElementById("cancelProductEditButton").addEventListener("click", resetProductForm);
+
+    async function deleteProduct(id) {
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        try {
+            const result = await api(`/api/products/${id}`, { method: "DELETE" });
+            alert(result.message || "Product deleted successfully.");
+            await loadProducts();
+        } catch (error) {
+            alert(error.message || "Could not delete product.");
+        }
+    }
+
+    async function loadServices() {
+        const status = document.getElementById("serviceStatus");
+        const body = document.getElementById("serviceTableBody");
+
+        try {
+            const data = await api("/api/services");
+            body.innerHTML = "";
+            const services = data.services || [];
+            setCount("servicesCount", services.length);
+
+            if (!services.length) {
+                status.textContent = "No services added yet.";
+                renderEmpty("serviceTableBody", 5, "No services available.");
+                return;
+            }
+
+            status.textContent = `${services.length} service(s) found.`;
+
+            services.forEach(service => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${escapeHTML(service.id)}</td>
+                    <td>${service.image
+                        ? `<img class="preview-img" src="${escapeHTML(service.image)}" alt="${escapeHTML(service.name)}">`
+                        : "No image"}</td>
+                    <td><strong>${escapeHTML(service.name)}</strong></td>
+                    <td>${escapeHTML(service.description)}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="table-btn table-btn-edit" type="button" onclick="startEditService(${Number(service.id)})">Edit</button>
+                            <button class="table-btn table-btn-delete" type="button" onclick="deleteService(${Number(service.id)})">Delete</button>
+                        </div>
+                    </td>
+                `;
+                body.appendChild(row);
+            });
+        } catch (error) {
+            status.textContent = error.message || "Could not load services.";
+        }
+    }
+
+    document.getElementById("serviceForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        const button = document.getElementById("serviceSubmitButton");
+
+        button.disabled = true;
+        button.textContent = editingServiceId === null ? "Saving..." : "Updating...";
+
+        try {
+            const url = editingServiceId === null
+                ? "/api/services"
+                : `/api/services/${editingServiceId}`;
+
+            const method = editingServiceId === null ? "POST" : "PUT";
+
+            const result = await api(url, {
+                method,
+                body: formData
+            });
+
+            alert(result.message || "Service saved successfully.");
+            resetServiceForm();
+            await loadServices();
+        } catch (error) {
+            alert(error.message || "Could not save service.");
+        } finally {
+            button.disabled = false;
+            button.textContent = editingServiceId === null ? "Add Service" : "Update Service";
+        }
+    });
+
+    async function startEditService(id) {
+        try {
+            const data = await api("/api/services");
+            const service = (data.services || []).find(item => Number(item.id) === Number(id));
+
+            if (!service) {
+                alert("Service not found.");
+                return;
+            }
+
+            editingServiceId = Number(service.id);
+            document.getElementById("serviceName").value = service.name || "";
+            document.getElementById("serviceDescription").value = service.description || "";
+            document.getElementById("serviceImage").value = "";
+            document.getElementById("serviceSubmitButton").textContent = "Update Service";
+            document.getElementById("cancelServiceEditButton").style.display = "inline-block";
+
+            document.getElementById("servicesSection").scrollIntoView({ behavior: "smooth", block: "start" });
+            document.getElementById("serviceName").focus();
+        } catch (error) {
+            alert(error.message || "Could not load service.");
+        }
+    }
+
+    function resetServiceForm() {
+        editingServiceId = null;
+        document.getElementById("serviceForm").reset();
+        document.getElementById("serviceSubmitButton").textContent = "Add Service";
+        document.getElementById("cancelServiceEditButton").style.display = "none";
+    }
+
+    document.getElementById("cancelServiceEditButton").addEventListener("click", resetServiceForm);
+
+    async function deleteService(id) {
+        if (!confirm("Are you sure you want to delete this service?")) return;
+
+        try {
+            const result = await api(`/api/services/${id}`, { method: "DELETE" });
+            alert(result.message || "Service deleted successfully.");
+            await loadServices();
+        } catch (error) {
+            alert(error.message || "Could not delete service.");
+        }
+    }
+
+    function cleanPhoneForLink(value) {
+        let raw = String(value || "").trim();
+
+        if (!raw) {
+            return "";
+        }
+
+        raw = raw.replace(/[^0-9+]/g, "");
+
+        if (raw.startsWith("+")) {
+            return raw;
+        }
+
+        if (raw.startsWith("00")) {
+            return `+${raw.slice(2)}`;
+        }
+
+        if (raw.length === 10 && raw.startsWith("0")) {
+            return `+254${raw.slice(1)}`;
+        }
+
+        if (raw.length === 9 && raw.startsWith("7")) {
+            return `+254${raw}`;
+        }
+
+        return raw;
+    }
+
+    function cleanWhatsAppNumber(value) {
+        let raw = String(value || "").trim();
+
+        if (!raw) {
+            return "";
+        }
+
+        raw = raw.replace(/(?:https?:\/\/)?(?:wa\.me\/|api\.whatsapp\.com\/send\?phone=)/i, "");
+        raw = raw.split(/[?#&]/)[0];
+        raw = raw.replace(/[^0-9]/g, "");
+
+        if (raw.length === 10 && raw.startsWith("0")) {
+            raw = `254${raw.slice(1)}`;
+        }
+
+        if (raw.startsWith("00")) {
+            raw = raw.slice(2);
+        }
+
+        return raw;
+    }
+
+    function customerQuickActions(item) {
+        const name = String(item?.name || "Customer").trim();
+        const phoneRaw = String(item?.phone || "").trim();
+        const emailRaw = String(item?.email || "").trim();
+        const phone = cleanPhoneForLink(phoneRaw);
+        const whatsapp = cleanWhatsAppNumber(phoneRaw);
+        const safeName = escapeHTML(name);
+
+        const callButton = phone
+            ? `<a class="quick-action quick-action-call" href="tel:${encodeURIComponent(phone)}" aria-label="Call ${safeName}" title="Call customer">📞<span class="sr-only">Call</span></a>`
+            : `<span class="quick-action quick-action-call quick-action-disabled" aria-label="No phone number" title="No phone number available">📞</span>`;
+
+        const whatsappButton = whatsapp
+            ? `<a class="quick-action quick-action-whatsapp" href="https://wa.me/${whatsapp}?text=${encodeURIComponent(`Hello ${name}, this is Swift Movers. We are following up regarding your enquiry.`)}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp ${safeName}" title="Message on WhatsApp">💬<span class="sr-only">WhatsApp</span></a>`
+            : `<span class="quick-action quick-action-whatsapp quick-action-disabled" aria-label="No WhatsApp number" title="No WhatsApp number available">💬</span>`;
+
+        const emailButton = emailRaw
+            ? `<a class="quick-action quick-action-email" href="mailto:${encodeURIComponent(emailRaw)}" aria-label="Email ${safeName}" title="Email customer">✉️<span class="sr-only">Email</span></a>`
+            : `<span class="quick-action quick-action-email quick-action-disabled" aria-label="No email address" title="No email address available">✉️</span>`;
+
+        return `<div class="quick-actions" aria-label="Quick customer actions">${callButton}${whatsappButton}${emailButton}</div>`;
+    }
+
+    let quotationModalPreviousFocus = null;
+
+    function quotationModalValue(value, fallback = "Not provided") {
+        const cleaned = String(value ?? "").trim();
+        return escapeHTML(cleaned || fallback);
+    }
+
+    function quotationModalPhoneLink(value) {
+        const raw = String(value ?? "").trim();
+        const href = cleanPhoneForLink(raw);
+
+        if (!href) {
+            return quotationModalValue(raw);
+        }
+
+        return `<a href="tel:${encodeURIComponent(href)}">${quotationModalValue(raw)}</a>`;
+    }
+
+    function quotationModalEmailLink(value) {
+        const raw = String(value ?? "").trim();
+
+        if (!raw) {
+            return "Not provided";
+        }
+
+        return `<a href="mailto:${encodeURIComponent(raw)}">${quotationModalValue(raw)}</a>`;
+    }
+
+    function quotationModalWhatsappLink(value) {
+        const raw = String(value ?? "").trim();
+        const number = cleanWhatsAppNumber(raw);
+
+        if (!number) {
+            return "Not available";
+        }
+
+        return `<a href="https://wa.me/${number}?text=${encodeURIComponent("Hello, this is Swift Movers. We are following up regarding your quotation request.")}" target="_blank" rel="noopener noreferrer">Open WhatsApp</a>`;
+    }
+
+    function quotationDetailCard(label, value, full = false) {
+        return `
+            <div class="quotation-detail-card${full ? " full" : ""}">
+                <span class="quotation-detail-label">${escapeHTML(label)}</span>
+                <div class="quotation-detail-value">${value}</div>
+            </div>
+        `;
+    }
+
+    function openQuotationDetails(id) {
+        const quotation = quotationsCache.find(item => Number(item.id) === Number(id));
+
+        if (!quotation) {
+            alert("Quotation not found.");
+            return;
+        }
+
+        const modal = document.getElementById("quotationModal");
+        const content = document.getElementById("quotationModalContent");
+        const actions = document.getElementById("quotationModalActions");
+
+        quotationModalPreviousFocus = document.activeElement;
+
+        document.getElementById("quotationModalTitle").textContent = `Quotation #${quotation.id}`;
+        document.getElementById("quotationModalSubtitle").textContent =
+            `${quotation.name || "Customer"} • Submitted ${quotation.created_at || "date not available"}`;
+
+        content.innerHTML = `
+            <div class="quotation-details-grid">
+                ${quotationDetailCard("Customer", quotationModalValue(quotation.name))}
+                ${quotationDetailCard("Phone", quotationModalPhoneLink(quotation.phone))}
+                ${quotationDetailCard("Email", quotationModalEmailLink(quotation.email))}
+                ${quotationDetailCard("WhatsApp", quotationModalWhatsappLink(quotation.phone))}
+                ${quotationDetailCard("Moving From", quotationModalValue(quotation.moving_from))}
+                ${quotationDetailCard("Moving To", quotationModalValue(quotation.moving_to))}
+                ${quotationDetailCard("Move Date", quotationModalValue(quotation.move_date))}
+                ${quotationDetailCard("Property Type", quotationModalValue(quotation.property_type))}
+                ${quotationDetailCard("Service", quotationModalValue(quotation.service))}
+                ${quotationDetailCard("Status", quotationModalValue(quotation.status))}
+                ${quotationDetailCard("Items / Inventory", quotationModalValue(quotation.items), true)}
+                ${quotationDetailCard("Additional Message", quotationModalValue(quotation.message), true)}
+            </div>
+        `;
+
+        actions.innerHTML = `
+            <div class="quotation-action-group" aria-label="Customer actions">
+                ${customerQuickActions(quotation)}
+            </div>
+        `;
+
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        document.getElementById("quotationModalCloseButton").focus();
+    }
+
+    function closeQuotationDetails() {
+        const modal = document.getElementById("quotationModal");
+
+        if (!modal.classList.contains("open")) {
+            return;
+        }
+
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+
+        if (quotationModalPreviousFocus && typeof quotationModalPreviousFocus.focus === "function") {
+            quotationModalPreviousFocus.focus();
+        }
+
+        quotationModalPreviousFocus = null;
+    }
+
+    function renderQuotations(quotations) {
+        const body = document.getElementById("quotationTableBody");
+        body.innerHTML = "";
+
+        quotations.forEach(quotation => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${escapeHTML(quotation.id)}</td>
+                <td><strong>${escapeHTML(quotation.name)}</strong><br><small>${escapeHTML(quotation.email)}</small></td>
+                <td>${escapeHTML(quotation.phone)}</td>
+                <td>${escapeHTML(quotation.moving_from)}</td>
+                <td>${escapeHTML(quotation.moving_to)}</td>
+                <td>${escapeHTML(quotation.move_date)}</td>
+                <td>${escapeHTML(quotation.property_type)}</td>
+                <td>${escapeHTML(quotation.service)}</td>
+                <td>
+                    <select class="status-select" onchange="updateQuotationStatus(${Number(quotation.id)}, this.value)" aria-label="Quotation status for request ${Number(quotation.id)}">
+                        <option value="new" ${quotation.status === "new" ? "selected" : ""}>New</option>
+                        <option value="contacted" ${quotation.status === "contacted" ? "selected" : ""}>Contacted</option>
+                        <option value="quoted" ${quotation.status === "quoted" ? "selected" : ""}>Quoted</option>
+                        <option value="completed" ${quotation.status === "completed" ? "selected" : ""}>Completed</option>
+                        <option value="cancelled" ${quotation.status === "cancelled" ? "selected" : ""}>Cancelled</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="quotation-action-group">
+                        <button
+                            class="view-quotation-button"
+                            type="button"
+                            onclick="openQuotationDetails(${Number(quotation.id)})"
+                            aria-label="View full quotation details for request ${Number(quotation.id)}"
+                            title="View full quotation details"
+                        >View Details</button>
+                        ${customerQuickActions(quotation)}
+                    </div>
+                </td>
+            `;
+            body.appendChild(row);
+            applyStatusClass(row.querySelector(".status-select"));
+        });
+    }
+
+    async function loadQuotations() {
+        const status = document.getElementById("quotationStatus");
+
+        try {
+            const data = await api("/api/quotations");
+            quotationsCache = data.quotations || [];
+            setCount("quotationsCount", quotationsCache.length);
+
+            if (!quotationsCache.length) {
+                status.textContent = "No quotation requests yet.";
+                renderEmpty("quotationTableBody", 10, "No quotation requests available.");
+                updateOverviewMeta();
+                return;
+            }
+
+            status.textContent = `${quotationsCache.length} quotation request(s) found.`;
+            updateOverviewMeta();
+            updateNotifications();
+            refreshFilteredQuotations();
+        } catch (error) {
+            status.textContent = error.message || "Could not load quotations.";
+        }
+    }
+
+    async function updateQuotationStatus(id, statusValue) {
+        try {
+            await api(`/api/quotations/${id}/status`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: statusValue })
+            });
+
+            const item = quotationsCache.find(entry => Number(entry.id) === Number(id));
+            if (item) {
+                item.status = statusValue;
+            }
+
+            updateOverviewMeta();
+            updateNotifications();
+            refreshFilteredQuotations();
+        } catch (error) {
+            alert(error.message || "Could not update quotation status.");
+            await loadQuotations();
+        }
+    }
+
+    function renderMessages(messages) {
+        const body = document.getElementById("messageTableBody");
+        body.innerHTML = "";
+
+        messages.forEach(message => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${escapeHTML(message.id)}</td>
+                <td><strong>${escapeHTML(message.name)}</strong></td>
+                <td>${escapeHTML(message.email)}</td>
+                <td>${escapeHTML(message.phone)}</td>
+                <td>${escapeHTML(message.subject)}</td>
+                <td style="max-width:360px;white-space:normal;line-height:1.55;">${escapeHTML(message.message)}</td>
+                <td>
+                    <select class="status-select" onchange="updateMessageStatus(${Number(message.id)}, this.value)" aria-label="Message status for message ${Number(message.id)}">
+                        <option value="unread" ${message.status === "unread" ? "selected" : ""}>Unread</option>
+                        <option value="read" ${message.status === "read" ? "selected" : ""}>Read</option>
+                        <option value="replied" ${message.status === "replied" ? "selected" : ""}>Replied</option>
+                    </select>
+                </td>
+                <td>${escapeHTML(message.created_at)}</td>
+                <td>${customerQuickActions(message)}</td>
+            `;
+            body.appendChild(row);
+            applyStatusClass(row.querySelector(".status-select"));
+        });
+    }
+
+    async function loadMessages() {
+        const status = document.getElementById("messageStatus");
+
+        try {
+            const data = await api("/api/messages");
+            messagesCache = data.messages || [];
+            setCount("messagesCount", messagesCache.length);
+
+            if (!messagesCache.length) {
+                status.textContent = "No customer messages yet.";
+                renderEmpty("messageTableBody", 9, "No customer messages available.");
+                updateOverviewMeta();
+                return;
+            }
+
+            status.textContent = `${messagesCache.length} customer message(s) found.`;
+            updateOverviewMeta();
+            updateNotifications();
+            refreshFilteredMessages();
+        } catch (error) {
+            status.textContent = error.message || "Could not load messages.";
+        }
+    }
+
+    async function updateMessageStatus(id, statusValue) {
+        try {
+            await api(`/api/messages/${id}/status`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: statusValue })
+            });
+
+            const item = messagesCache.find(entry => Number(entry.id) === Number(id));
+            if (item) {
+                item.status = statusValue;
+            }
+
+            updateOverviewMeta();
+            updateNotifications();
+            refreshFilteredMessages();
+        } catch (error) {
+            alert(error.message || "Could not update message status.");
+            await loadMessages();
+        }
+    }
+
+    const settingsFields = {
+        business_name: "settingBusinessName",
+        tagline: "settingTagline",
+        phone: "settingPhone",
+        email: "settingEmail",
+        address: "settingAddress",
+        operating_hours: "settingHours",
+        whatsapp: "settingWhatsapp",
+        facebook: "settingFacebook",
+        instagram: "settingInstagram",
+        tiktok: "settingTiktok"
+    };
+
+    async function loadSettings() {
+        const status = document.getElementById("settingsStatus");
+
+        try {
+            const data = await api("/api/settings");
+            const settings = data.settings || {};
+
+            Object.entries(settingsFields).forEach(([key, elementId]) => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.value = settings[key] || "";
+                }
+            });
+
+            status.textContent = "Settings loaded.";
+            status.className = "settings-status";
+        } catch (error) {
+            status.textContent = error.message || "Could not load site settings.";
+            status.className = "settings-status error";
+        }
+    }
+
+    document.getElementById("settingsForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const button = document.getElementById("settingsSaveButton");
+        const status = document.getElementById("settingsStatus");
+        const payload = Object.fromEntries(new FormData(form).entries());
+
+        button.disabled = true;
+        button.textContent = "Saving...";
+        status.textContent = "Saving your settings...";
+        status.className = "settings-status";
+
+        try {
+            const result = await api("/api/settings", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            status.textContent = result.message || "Site settings updated successfully.";
+            status.className = "settings-status success";
+        } catch (error) {
+            status.textContent = error.message || "Could not save site settings.";
+            status.className = "settings-status error";
+        } finally {
+            button.disabled = false;
+            button.textContent = "Save Settings";
+        }
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+        try {
+            const result = await fetch("/api/admin/logout", {
+                method: "POST",
+                credentials: "same-origin"
+            });
+
+            const data = await result.json();
+
+            if (data.success) {
+                window.location.href = "/admin/login.html";
+                return;
+            }
+
+            alert(data.message || "Could not log out.");
+        } catch {
+            alert("Could not connect to the server.");
+        }
+    });
+
+    document.getElementById("exportQuotationsButton").addEventListener("click", exportQuotationsCSV);
+    document.getElementById("exportMessagesButton").addEventListener("click", exportMessagesCSV);
+
+    document.getElementById("quotationModalCloseButton").addEventListener("click", closeQuotationDetails);
+    document.getElementById("quotationModalCloseFooterButton").addEventListener("click", closeQuotationDetails);
+
+    document.getElementById("quotationModal").addEventListener("click", event => {
+        if (event.target === event.currentTarget) {
+            closeQuotationDetails();
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        const modal = document.getElementById("quotationModal");
+
+        if (event.key === "Escape" && modal.classList.contains("open")) {
+            closeQuotationDetails();
+        }
+    });
+
+    document.getElementById("quotationSearch").addEventListener("input", refreshFilteredQuotations);
+    document.getElementById("messageSearch").addEventListener("input", refreshFilteredMessages);
+
+    document.getElementById("notificationButton").addEventListener("click", toggleNotifications);
+
+    document.getElementById("notificationPanel").addEventListener("click", event => {
+        if (event.target.closest("[data-close-notifications]")) {
+            closeNotifications();
+        }
+    });
+
+    document.addEventListener("click", event => {
+        const wrap = document.getElementById("notificationWrap");
+        if (!wrap.contains(event.target)) {
+            closeNotifications();
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closeNotifications();
+        }
+    });
+
+    Promise.all([
+        loadProducts(),
+        loadServices(),
+        loadQuotations(),
+        loadMessages(),
+        loadSettings(),
+        loadVisitorNotificationSummary(),
+        checkServerStatus()
+    ]).finally(() => {
+        updateDashboardTimestamp();
+        updateNotifications();
+    });
+
+    setInterval(async () => {
+        await Promise.all([
+            loadQuotations(),
+            loadMessages(),
+            loadVisitorNotificationSummary()
+        ]);
+        updateDashboardTimestamp();
+    }, 60000);
+</script>
+</body>
+</html>

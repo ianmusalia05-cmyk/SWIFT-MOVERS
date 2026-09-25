@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Request a moving quotation from Swift Movers. Share your move details and requirements with our team.">
+    <title>Request a Quote | Swift Movers</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        /* =========================================================
+           PREMIUM QUOTATION PAGE
+        ========================================================= */
+
+        .quotation-page {
+            background:
+                radial-gradient(circle at 8% 12%, rgba(212, 164, 58, 0.08), transparent 28%),
+                radial-gradient(circle at 92% 28%, rgba(12, 31, 54, 0.06), transparent 30%),
+                #f7f8fa;
+        }
+
+        .quote-hero {
+            position: relative;
+            overflow: hidden;
+            padding: 94px 0 82px;
+            background:
+                linear-gradient(135deg, #0c1f36 0%, #142d4b 58%, #1c3b5d 100%);
+            color: #ffffff;
+        }
+
+        .quote-hero::before,
+        .quote-hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .quote-hero::before {
+            width: 360px;
+            height: 360px;
+            top: -190px;
+            right: -100px;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 0 0 38px rgba(255,255,255,0.025), 0 0 0 76px rgba(255,255,255,0.018);
+        }
+
+        .quote-hero::after {
+            width: 240px;
+            height: 240px;
+            bottom: -150px;
+            left: -90px;
+            border: 1px solid rgba(212,164,58,0.20);
+        }
+
+        .quote-hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 850px;
+        }
+
+        .quote-hero .eyebrow {
+            color: #e4b85a;
+            letter-spacing: 0.18em;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .quote-hero h1 {
+            margin: 0 0 18px;
+            font-size: clamp(2.6rem, 6vw, 4.9rem);
+            line-height: 0.98;
+            letter-spacing: -0.045em;
+            max-width: 900px;
+        }
+
+        .quote-hero p:not(.eyebrow) {
+            margin: 0;
+            max-width: 700px;
+            color: rgba(255,255,255,0.84);
+            font-size: 1.06rem;
+            line-height: 1.8;
+        }
+
+        .quote-trust-bar {
+            margin-top: 34px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .quote-trust-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 15px;
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.9);
+            font-size: 0.88rem;
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+        }
+
+        .quote-trust-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e4b85a;
+            box-shadow: 0 0 0 4px rgba(228,184,90,0.12);
+            flex: 0 0 auto;
+        }
+
+        .quotation-section {
+            position: relative;
+            padding: 82px 0 96px;
+        }
+
+        .quotation-grid {
+            display: grid;
+            grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.4fr);
+            gap: 42px;
+            align-items: start;
+        }
+
+        .quotation-info {
+            position: sticky;
+            top: 118px;
+        }
+
+        .quotation-info .eyebrow {
+            color: #b2872f;
+            letter-spacing: 0.18em;
+            font-weight: 800;
+        }
+
+        .quotation-info h2,
+        .quotation-form-wrapper h2 {
+            color: #0c1f36;
+            letter-spacing: -0.025em;
+        }
+
+        .quotation-info > p:not(.eyebrow) {
+            color: #586575;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .quote-journey {
+            margin-top: 34px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .quote-step {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 15px;
+            padding: 17px;
+            border: 1px solid rgba(12,31,54,0.08);
+            border-radius: 18px;
+            background: rgba(255,255,255,0.82);
+            box-shadow: 0 10px 25px rgba(12,31,54,0.04);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .quote-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 34px rgba(12,31,54,0.08);
+            border-color: rgba(212,164,58,0.38);
+        }
+
+        .quote-step-number {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            background: linear-gradient(145deg, #0c1f36, #1b3a5c);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.92rem;
+            box-shadow: 0 10px 22px rgba(12,31,54,0.16);
+        }
+
+        .quote-step h3 {
+            margin: 3px 0 6px;
+            color: #12263d;
+            font-size: 1rem;
+        }
+
+        .quote-step p {
+            margin: 0;
+            color: #697684;
+            line-height: 1.65;
+            font-size: 0.91rem;
+        }
+
+        .quote-note-card {
+            margin-top: 18px;
+            padding: 18px 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(212,164,58,0.25);
+            background: linear-gradient(135deg, rgba(228,184,90,0.10), rgba(228,184,90,0.035));
+        }
+
+        .quote-note-card strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #0c1f36;
+        }
+
+        .quote-note-card span {
+            color: #677380;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        .quotation-form-wrapper {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(12,31,54,0.09);
+            border-radius: 28px;
+            padding: 34px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 28px 65px rgba(12,31,54,0.10);
+        }
+
+        .quotation-form-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0c1f36, #e4b85a, #0c1f36);
+        }
+
+        .quotation-form-wrapper > p {
+            margin-top: -4px;
+            margin-bottom: 28px;
+            color: #74808c;
+            font-size: 0.92rem;
+        }
+
+        .quote-form-intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .quote-form-badge {
+            flex: 0 0 auto;
+            padding: 8px 12px;
+            border: 1px solid rgba(12,31,54,0.09);
+            border-radius: 999px;
+            background: #f6f8fa;
+            color: #445364;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .quotation-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-section-title {
+            margin-top: 8px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(12,31,54,0.08);
+            color: #0c1f36;
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 900;
+        }
+
+        .form-section-title:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: 0;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group label {
+            color: #20344b;
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .quotation-form input,
+        .quotation-form select,
+        .quotation-form textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #d9e0e7;
+            border-radius: 14px;
+            padding: 13px 15px;
+            background: #fbfcfd;
+            color: #1d3045;
+            font: inherit;
+            line-height: 1.45;
+            outline: none;
+            transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease, transform 160ms ease;
+        }
+
+        .quotation-form textarea {
+            min-height: 126px;
+            resize: vertical;
+        }
+
+        .quotation-form input::placeholder,
+        .quotation-form textarea::placeholder {
+            color: #98a3ae;
+        }
+
+        .quotation-form input:hover,
+        .quotation-form select:hover,
+        .quotation-form textarea:hover {
+            border-color: #bcc8d4;
+            background: #ffffff;
+        }
+
+        .quotation-form input:focus,
+        .quotation-form select:focus,
+        .quotation-form textarea:focus {
+            border-color: #d5aa4b;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(212,164,58,0.14);
+        }
+
+        .quotation-submit {
+            width: 100%;
+            min-height: 56px;
+            margin-top: 5px;
+            border: 0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #0c1f36, #173757);
+            color: #ffffff;
+            font-weight: 900;
+            letter-spacing: 0.01em;
+            box-shadow: 0 16px 30px rgba(12,31,54,0.18);
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+        }
+
+        .quotation-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 34px rgba(12,31,54,0.22);
+            filter: brightness(1.07);
+        }
+
+        .quotation-submit:active {
+            transform: translateY(0);
+        }
+
+        .form-note {
+            margin: 0;
+            color: #7a8792;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .quote-bottom-cta {
+            margin-top: 28px;
+            padding: 24px;
+            border-radius: 22px;
+            background: #0c1f36;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .quote-bottom-cta strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .quote-bottom-cta span {
+            display: block;
+            color: rgba(255,255,255,0.74);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .quote-bottom-cta .btn {
+            flex: 0 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .quotation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quotation-info {
+                position: static;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .quote-hero {
+                padding: 74px 0 62px;
+            }
+
+            .quotation-section {
+                padding: 58px 0 70px;
+            }
+
+            .quotation-form-wrapper {
+                padding: 22px;
+                border-radius: 22px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .quote-form-intro {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .quote-bottom-cta {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .quote-bottom-cta .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quote-step,
+            .quotation-form input,
+            .quotation-form select,
+            .quotation-form textarea,
+            .quotation-submit {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="quotation-page">
+
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo"><span data-site-setting="business_name">Swift Movers</span></a>
+
+            <nav class="navigation" aria-label="Main navigation">
+                <a href="../index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="products.html">Products</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <a href="quotation.html" class="btn" aria-current="page">Request a Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="quote-hero">
+            <div class="container quote-hero-inner">
+                <p class="eyebrow">LET'S PLAN YOUR MOVE</p>
+                <h1>Move with a plan.<br>Quote with confidence.</h1>
+                <p>
+                    Share the details of your move and give our team the information needed to understand the job and prepare your quotation.
+                </p>
+
+                <div class="quote-trust-bar" aria-label="Quote form highlights">
+                    <span class="quote-trust-chip"><span class="quote-trust-dot"></span>Clear move details</span>
+                    <span class="quote-trust-chip"><span class="quote-trust-dot"></span>Service-based request</span>
+                    <span class="quote-trust-chip"><span class="quote-trust-dot"></span>Easy online submission</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="quotation-section">
+            <div class="container quotation-grid">
+
+                <aside class="quotation-info">
+                    <p class="eyebrow">YOUR MOVE</p>
+                    <h2>Everything starts with the right details.</h2>
+                    <p>
+                        A good quotation starts with a clear picture of what needs to be moved, where it is coming from, where it is going, and the service you need.
+                    </p>
+
+                    <div class="quote-journey">
+                        <article class="quote-step">
+                            <div class="quote-step-number">01</div>
+                            <div>
+                                <h3>Your details</h3>
+                                <p>Give us your name and the best contact information for your request.</p>
+                            </div>
+                        </article>
+
+                        <article class="quote-step">
+                            <div class="quote-step-number">02</div>
+                            <div>
+                                <h3>Move details</h3>
+                                <p>Tell us your pickup point, destination, preferred date, and property type.</p>
+                            </div>
+                        </article>
+
+                        <article class="quote-step">
+                            <div class="quote-step-number">03</div>
+                            <div>
+                                <h3>Service & requirements</h3>
+                                <p>Select the service you need and describe important items or special requirements.</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="quote-note-card">
+                        <strong>Helpful tip</strong>
+                        <span>The more useful detail you provide, the easier it is for our team to understand the scope of your move.</span>
+                    </div>
+                </aside>
+
+                <div>
+                    <div class="quotation-form-wrapper">
+                        <div class="quote-form-intro">
+                            <div>
+                                <h2>Your quotation request</h2>
+                                <p>All fields marked with * are required.</p>
+                            </div>
+                            <span class="quote-form-badge">Secure form</span>
+                        </div>
+
+                        <form id="quotationForm" class="quotation-form">
+                            <div class="form-section-title">Customer Details</div>
+
+                            <div class="form-group">
+                                <label for="quoteName">Full Name *</label>
+                                <input type="text" id="quoteName" name="name" placeholder="Your full name" autocomplete="name" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quoteEmail">Email Address *</label>
+                                    <input type="email" id="quoteEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="quotePhone">Phone Number *</label>
+                                    <input type="tel" id="quotePhone" name="phone" placeholder="+254..." autocomplete="tel" required>
+                                </div>
+                            </div>
+
+                            <div class="form-section-title">Move Details</div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="movingFrom">Moving From *</label>
+                                    <input type="text" id="movingFrom" name="moving_from" placeholder="Pickup location" autocomplete="street-address" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="movingTo">Moving To *</label>
+                                    <input type="text" id="movingTo" name="moving_to" placeholder="Destination" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="moveDate">Preferred Moving Date *</label>
+                                    <input type="date" id="moveDate" name="move_date" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="propertyType">Property Type *</label>
+                                    <select id="propertyType" name="property_type" required>
+                                        <option value="">Select property type</option>
+                                        <option value="house">House</option>
+                                        <option value="apartment">Apartment</option>
+                                        <option value="office">Office</option>
+                                        <option value="shop">Shop</option>
+                                        <option value="school">School</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-section-title">Service & Requirements</div>
+
+                            <div class="form-group">
+                                <label for="service">Service Required *</label>
+                                <select id="service" name="service" required>
+                                    <option value="">Loading services...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="items">Items / Moving Details</label>
+                                <textarea id="items" name="items" rows="5" placeholder="Tell us about the items you need moved, approximate quantity, special requirements, etc."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="additionalMessage">Additional Message</label>
+                                <textarea id="additionalMessage" name="message" rows="4" placeholder="Anything else we should know?"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn quotation-submit">Submit Quote Request</button>
+
+                            <p class="form-note">
+                                By submitting this form, you are requesting a quotation from Swift Movers.
+                            </p>
+                        </form>
+                    </div>
+
+                    <div class="quote-bottom-cta">
+                        <div>
+                            <strong>Need to speak with us first?</strong>
+                            <span>Send a direct message through the contact page before submitting your quotation request.</span>
+                        </div>
+                        <a href="contact.html" class="btn">Contact Swift Movers</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div>
+                <a href="../index.html" class="logo">Swift<span>Movers</span></a>
+                <p data-site-setting="tagline">Moving made simple.</p>
+            </div>
+            <p>© 2026 <span data-site-setting="business_name">Swift Movers</span>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/site-settings.js"></script>
+
+    <script>
+        async function loadQuotationServices() {
+            const serviceSelect = document.getElementById("service");
+
+            try {
+                const response = await fetch("/api/services");
+                const data = await response.json();
+
+                serviceSelect.innerHTML = "";
+
+                if (!data.success || !data.services || data.services.length === 0) {
+                    const option = document.createElement("option");
+                    option.value = "";
+                    option.textContent = "No services available";
+                    option.disabled = true;
+                    serviceSelect.appendChild(option);
+                    return;
+                }
+
+                const defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "Select a service";
+                serviceSelect.appendChild(defaultOption);
+
+                data.services.forEach(service => {
+                    const option = document.createElement("option");
+                    option.value = service.name;
+                    option.textContent = service.name;
+                    serviceSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Quotation service loading error:", error);
+
+                serviceSelect.innerHTML = "";
+
+                const option = document.createElement("option");
+                option.value = "";
+                option.textContent = "Could not load services";
+                option.disabled = true;
+                serviceSelect.appendChild(option);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const moveDate = document.getElementById("moveDate");
+            if (moveDate) {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, "0");
+                const day = String(today.getDate()).padStart(2, "0");
+                moveDate.min = `${year}-${month}-${day}`;
+            }
+        });
+
+        loadQuotationServices();
+    </script>
+
+    <script src="../js/main.js"></script>
+<script src="../js/whatsapp-float.js"></script>
+</body>
+</html>

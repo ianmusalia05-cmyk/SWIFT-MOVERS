@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Analytics | Swift Movers Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        :root {
+            --admin-navy: #071426;
+            --admin-navy-2: #0d1f36;
+            --admin-gold: #d6a63a;
+            --admin-gold-soft: #fff7df;
+            --admin-bg: #f4f7fb;
+            --admin-card: #ffffff;
+            --admin-border: #e4eaf2;
+            --admin-text: #172033;
+            --admin-muted: #6b778c;
+            --admin-success: #16835b;
+            --admin-danger: #d64646;
+            --admin-shadow: 0 18px 45px rgba(7, 20, 38, 0.08);
+            --admin-radius: 20px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top right, rgba(214,166,58,0.10), transparent 28%),
+                var(--admin-bg);
+            color: var(--admin-text);
+        }
+
+        button, input { font: inherit; }
+
+        .admin-shell { min-height: 100vh; }
+
+        .admin-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(7, 20, 38, 0.94);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .admin-topbar-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .admin-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #d6a63a, #f2cf72);
+            color: #071426;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+        }
+
+        .admin-brand strong { display: block; font-size: 17px; }
+        .admin-brand span { display: block; margin-top: 2px; color: #aeb8c8; font-size: 12px; }
+
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            appearance: none;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .admin-btn:hover { transform: translateY(-2px); }
+        .admin-btn-light { background: rgba(255,255,255,0.10); color: #fff; border-color: rgba(255,255,255,0.15); }
+        .admin-btn-gold { background: linear-gradient(135deg, #d6a63a, #f2cf72); color: #071426; box-shadow: 0 10px 24px rgba(214,166,58,0.22); }
+        .admin-btn-danger { background: rgba(214,70,70,0.12); color: #ffb5b5; border-color: rgba(214,70,70,0.25); }
+
+        .admin-main {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 34px 24px 60px;
+        }
+
+        .hero-panel {
+            background: linear-gradient(135deg, rgba(7,20,38,0.98), rgba(13,31,54,0.96));
+            border-radius: 26px;
+            padding: 34px;
+            color: #fff;
+            box-shadow: var(--admin-shadow);
+            margin-bottom: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            right: -80px;
+            top: -110px;
+            border: 1px solid rgba(214,166,58,0.18);
+        }
+
+        .hero-kicker {
+            margin: 0 0 8px;
+            color: var(--admin-gold);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+        }
+
+        .hero-panel h1 {
+            margin: 0;
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.06;
+        }
+
+        .hero-copy {
+            max-width: 760px;
+            margin-top: 12px;
+            color: #bdc7d7;
+            line-height: 1.7;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .overview-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 22px;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .overview-card .label {
+            font-size: 12px;
+            color: var(--admin-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .overview-card .value {
+            display: block;
+            margin-top: 9px;
+            font-size: 34px;
+            font-weight: 900;
+            color: var(--admin-navy);
+        }
+
+        .overview-card .mini {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--admin-muted);
+        }
+
+        .dashboard-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 26px;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            color: var(--admin-navy);
+            font-size: 24px;
+        }
+
+        .section-head p {
+            margin: 6px 0 0;
+            color: var(--admin-muted);
+            line-height: 1.55;
+        }
+
+        .section-badge {
+            flex: 0 0 auto;
+            padding: 8px 11px;
+            border-radius: 999px;
+            background: var(--admin-gold-soft);
+            color: #9a7212;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .info-note {
+            margin: 0 0 18px;
+            padding: 13px 15px;
+            background: #f7f9fc;
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
+            color: var(--admin-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            flex: 1 1 360px;
+            min-width: 260px;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            border: 1px solid #d4dce7;
+            border-radius: 12px;
+            padding: 12px 13px;
+            background: #fff;
+            color: var(--admin-text);
+            outline: none;
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--admin-gold);
+            box-shadow: 0 0 0 4px rgba(214,166,58,0.14);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--admin-border);
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+            background: #fff;
+        }
+
+        th, td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--admin-border);
+            vertical-align: top;
+        }
+
+        th {
+            background: #f7f9fc;
+            color: var(--admin-navy);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        td {
+            color: #4b5870;
+            font-size: 14px;
+        }
+
+        tbody tr:hover td { background: #fbfcfe; }
+
+        .ip-address {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #eef3f8;
+            color: #1d3954;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .page-path {
+            color: var(--admin-navy);
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .user-agent {
+            max-width: 430px;
+            line-height: 1.55;
+            word-break: break-word;
+            color: #66758b;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            padding: 34px;
+            text-align: center;
+            color: var(--admin-muted);
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-status {
+            color: var(--admin-muted);
+            font-size: 13px;
+        }
+
+        .pagination-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pagination-actions button {
+            border: 1px solid var(--admin-border);
+            background: #fff;
+            color: var(--admin-navy);
+            border-radius: 10px;
+            padding: 9px 12px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .pagination-actions button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #8290a5;
+            font-size: 12px;
+            padding-top: 18px;
+        }
+
+        @media (max-width: 980px) {
+            .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 720px) {
+            .admin-topbar-inner { flex-direction: column; align-items: stretch; }
+            .admin-actions { width: 100%; }
+            .admin-actions .admin-btn { flex: 1; text-align: center; }
+            .admin-main { padding-left: 16px; padding-right: 16px; }
+            .hero-panel { padding: 26px; }
+            .dashboard-card { padding: 18px; }
+            .section-head { flex-direction: column; }
+            .overview-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .overview-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-shell">
+    <header class="admin-topbar">
+        <div class="admin-topbar-inner">
+            <a class="admin-brand" href="index.html" aria-label="Swift Movers admin dashboard">
+                <div class="admin-mark">SM</div>
+                <div>
+                    <strong>Swift Movers Admin</strong>
+                    <span>Visitor Analytics</span>
+                </div>
+            </a>
+
+            <div class="admin-actions">
+                <a class="admin-btn admin-btn-light" href="index.html">Dashboard</a>
+                <a class="admin-btn admin-btn-light" href="../index.html">View Website</a>
+                <button id="logoutButton" class="admin-btn admin-btn-danger" type="button">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <section class="hero-panel">
+            <p class="hero-kicker">VISITOR ANALYTICS</p>
+            <h1>See who has been visiting Swift Movers.</h1>
+            <div class="hero-copy">
+                Monitor recorded public page visits, see the IP address associated with each request,
+                and review when your website has been accessed.
+            </div>
+        </section>
+
+        <section class="overview-grid" aria-label="Visitor overview">
+            <div class="overview-card">
+                <span class="label">Total Visits</span>
+                <strong class="value" id="totalVisits">—</strong>
+                <div class="mini">Recorded public page views</div>
+            </div>
+            <div class="overview-card">
+                <span class="label">Unique IPs</span>
+                <strong class="value" id="uniqueIps">—</strong>
+                <div class="mini">Distinct IP addresses recorded</div>
+            </div>
+            <div class="overview-card">
+                <span class="label">Today</span>
+                <strong class="value" id="visitsToday">—</strong>
+                <div class="mini">Visits recorded today</div>
+            </div>
+            <div class="overview-card">
+                <span class="label">Last Visit</span>
+                <strong class="value" id="lastVisit">—</strong>
+                <div class="mini" id="lastVisitDetail">Waiting for data</div>
+            </div>
+        </section>
+
+        <section class="dashboard-card">
+            <div class="section-head">
+                <div>
+                    <h2>Visitor &amp; Page View Log</h2>
+                    <p>Each row represents a recorded public HTML page visit.</p>
+                </div>
+                <span class="section-badge">ADMIN ONLY</span>
+            </div>
+
+            <p class="info-note">
+                IP addresses identify network connections, not necessarily individual people. Shared networks,
+                mobile carriers, VPNs, and proxies can cause multiple people to appear under one IP address.
+            </p>
+
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <label for="visitorSearch" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Search visitors</label>
+                    <input id="visitorSearch" type="search" placeholder="Search by IP address or page path..." autocomplete="off">
+                </div>
+                <button id="refreshVisitorsButton" class="admin-btn admin-btn-gold" type="button">Refresh</button>
+            </div>
+
+            <div id="visitorStatus" class="panel-status" aria-live="polite">Loading visitor data...</div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>IP Address</th>
+                        <th>Page Visited</th>
+                        <th>Browser / Device</th>
+                        <th>Visited At</th>
+                    </tr>
+                    </thead>
+                    <tbody id="visitorTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <div id="paginationStatus" class="pagination-status">—</div>
+                <div class="pagination-actions">
+                    <button id="previousPageButton" type="button" disabled>Previous</button>
+                    <button id="nextPageButton" type="button" disabled>Next</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-note">Swift Movers Admin • Visitor analytics are visible only inside the protected admin area.</div>
+    </main>
+</div>
+
+<script>
+    const state = {
+        limit: 50,
+        offset: 0,
+        total: 0,
+        search: ""
+    };
+
+    async function api(url, options = {}) {
+        const response = await fetch(url, {
+            credentials: "same-origin",
+            ...options
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "/admin/login.html";
+            throw new Error("Unauthorized");
+        }
+
+        let data = {};
+        try {
+            data = await response.json();
+        } catch {
+            data = { success: false, message: "Invalid server response." };
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Request failed.");
+        }
+
+        return data;
+    }
+
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(value) {
+        if (!value) return "—";
+
+        const parsed = new Date(String(value).replace(" ", "T") + "Z");
+        if (Number.isNaN(parsed.getTime())) return String(value);
+
+        return parsed.toLocaleString();
+    }
+
+    function formatLastVisit(value) {
+        if (!value) {
+            document.getElementById("lastVisit").textContent = "—";
+            document.getElementById("lastVisitDetail").textContent = "No visits recorded yet";
+            return;
+        }
+
+        const parsed = new Date(String(value).replace(" ", "T") + "Z");
+        if (Number.isNaN(parsed.getTime())) {
+            document.getElementById("lastVisit").textContent = String(value);
+            document.getElementById("lastVisitDetail").textContent = "Most recent recorded visit";
+            return;
+        }
+
+        document.getElementById("lastVisit").textContent = parsed.toLocaleDateString();
+        document.getElementById("lastVisitDetail").textContent = parsed.toLocaleTimeString();
+    }
+
+    function renderEmpty() {
+        document.getElementById("visitorTableBody").innerHTML =
+            '<tr><td colspan="5" class="empty-state">No visitor records found.</td></tr>';
+    }
+
+    function updatePagination() {
+        const start = state.total === 0 ? 0 : state.offset + 1;
+        const end = Math.min(state.offset + state.limit, state.total);
+
+        document.getElementById("paginationStatus").textContent =
+            state.total === 0
+                ? "0 records"
+                : `Showing ${start}–${end} of ${state.total}`;
+
+        document.getElementById("previousPageButton").disabled = state.offset === 0;
+        document.getElementById("nextPageButton").disabled = state.offset + state.limit >= state.total;
+    }
+
+    async function loadVisitors() {
+        const status = document.getElementById("visitorStatus");
+        const body = document.getElementById("visitorTableBody");
+
+        status.textContent = "Loading visitor data...";
+
+        try {
+            const params = new URLSearchParams({
+                limit: String(state.limit),
+                offset: String(state.offset)
+            });
+
+            if (state.search) {
+                params.set("search", state.search);
+            }
+
+            const data = await api(`/api/visitors?${params.toString()}`);
+            const stats = data.stats || {};
+            const visits = data.visits || [];
+
+            document.getElementById("totalVisits").textContent = Number(stats.total_visits || 0);
+            document.getElementById("uniqueIps").textContent = Number(stats.unique_ips || 0);
+            document.getElementById("visitsToday").textContent = Number(stats.visits_today || 0);
+            formatLastVisit(stats.last_visit);
+
+            state.total = Number(data.pagination?.total || 0);
+            body.innerHTML = "";
+
+            if (!visits.length) {
+                renderEmpty();
+                status.textContent = state.search ? "No matching visitor records." : "No visitor records yet.";
+                updatePagination();
+                return;
+            }
+
+            status.textContent = `${visits.length} record(s) loaded.`;
+
+            visits.forEach((visit) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${escapeHTML(visit.id)}</td>
+                    <td><span class="ip-address">${escapeHTML(visit.ip_address)}</span></td>
+                    <td><span class="page-path">${escapeHTML(visit.page_path)}</span></td>
+                    <td><div class="user-agent">${escapeHTML(visit.user_agent || "Not available")}</div></td>
+                    <td>${escapeHTML(formatDate(visit.visited_at))}</td>
+                `;
+                body.appendChild(row);
+            });
+
+            updatePagination();
+        } catch (error) {
+            body.innerHTML = "";
+            renderEmpty();
+            status.textContent = error.message || "Could not load visitor data.";
+            updatePagination();
+        }
+    }
+
+    let searchTimer = null;
+
+    document.getElementById("visitorSearch").addEventListener("input", (event) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            state.search = event.target.value.trim();
+            state.offset = 0;
+            loadVisitors();
+        }, 250);
+    });
+
+    document.getElementById("refreshVisitorsButton").addEventListener("click", () => {
+        loadVisitors();
+    });
+
+    document.getElementById("previousPageButton").addEventListener("click", () => {
+        state.offset = Math.max(0, state.offset - state.limit);
+        loadVisitors();
+    });
+
+    document.getElementById("nextPageButton").addEventListener("click", () => {
+        if (state.offset + state.limit < state.total) {
+            state.offset += state.limit;
+            loadVisitors();
+        }
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+        try {
+            const result = await fetch("/api/admin/logout", {
+                method: "POST",
+                credentials: "same-origin"
+            });
+
+            const data = await result.json();
+
+            if (data.success) {
+                window.location.href = "/admin/login.html";
+                return;
+            }
+
+            alert(data.message || "Could not log out.");
+        } catch {
+            alert("Could not connect to the server.");
+        }
+    });
+
+    loadVisitors();
+</script>
+</body>
+</html>
