@@ -20,3 +20,9 @@ server/*.db-shm
 .DS_Store
 Thumbs.db
 .vscode/
+
+node_modules/
+swift-movers.db
+*.db-shm
+*.db-wal
+uploads/
