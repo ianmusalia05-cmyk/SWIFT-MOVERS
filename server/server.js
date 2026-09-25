@@ -1558,10 +1558,6 @@ app.use((error, req, res, next) => {
 // START SERVER
 // =========================
 
-app.listen(PORT, () => {
-
-    console.log(
-        `Swift Movers server running at http://localhost:${PORT}`
-    );
-
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Swift Movers server running on port ${PORT}`);
 });
